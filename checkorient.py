@@ -28,13 +28,14 @@ class Rotation:
 # start of the main program
 if __name__ == "__main__":
     net = 'IU'
+    station = "ANTO"
 # Here is our start and end time
     stime = UTCDateTime('2016-001T00:00:00.0')
     etime = UTCDateTime('2016-005T00:00:00.0')
     ctime = stime
 
 # Grab all the stations
-    stas = glob.glob('/msd/' + net + '_*/' +  str(stime.year) )
+    stas = glob.glob('/msd/' + net + '_*'+station+'/' +  str(stime.year) )
     if debug:
         print stas
 
@@ -91,13 +92,6 @@ if __name__ == "__main__":
                         if debug:
                             print(stref)
                             print(sttest)
-            # This is really bad programming we need to fix this    
-            # it is really bad.  what the hell is he doing here?
-            
-            #this is a lambda function - only have to call x to do 
-            # the rotation. makes it easier to find root?
-            # this is so you don't have to pass stref sttest into root
-            #temprot = lambda x: rot(x, stref, sttest)
             #rotdata is an object that stores the data and has
             #the rotation method.
                         rotdata=Rotation(stref,sttest)
@@ -109,11 +103,12 @@ if __name__ == "__main__":
                         theta = result['x'][0]
             #what is fun?
                         resi = result['fun'] 
-                        print(result)
+                        print('result: ',str(result))
                         if debug:
                             print('Here is theta: ' + str(theta))
                             print('Here is the residual: ' + str(resi))
                         if 'f' not in globals():
+                            print('opening file')
                             f=open('Results_' + sta, 'w')
                             f.write('ReferenceLoc, TestLoc, day, year, theta, residual\n')
                         f.write(refloc +', '+ loc +', '+ day +', ' + str(ctime.year) + ', ' + str(theta) + ', ' + str(resi) + '\n')
