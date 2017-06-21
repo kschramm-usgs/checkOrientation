@@ -25,7 +25,7 @@ here
 ('result: ', "   cov_x: array([[  7.85174922e+14]])\n    fjac: array([[  3.56875546e-08]])\n     fun: 0.0013598743515560452\n    ipvt: array([1], dtype=int32)\n message: 'Both actual and predicted relative reductions in the sum of squares\\n  are at most 0.000000'\n    nfev: 19\n     qtf: array([-0.00135987])\n  status: 1\n success: True\n       x: array([-136.53706095])")
 Here is theta: -136.537060949
 Here is the residual: 0.00135987435156
-opening file Results_IU_DWPF
+opening file ./Results_IU_DWPF
 ['00']
 ['00']
 On day: 002
@@ -164,3 +164,288 @@ here
 ('result: ', "   cov_x: array([[  8.83463298e+15]])\n    fjac: array([[  1.06391209e-08]])\n     fun: 0.0013546719518271466\n    ipvt: array([1], dtype=int32)\n message: 'Both actual and predicted relative reductions in the sum of squares\\n  are at most 0.000000'\n    nfev: 12\n     qtf: array([-0.00135467])\n  status: 1\n success: True\n       x: array([ 3.50200994])")
 Here is theta: 3.50200993598
 Here is the residual: 0.00135467195183
+opening file ./Results_IU_HRV
+['00']
+['00']
+On day: 002
+6 Trace(s) in Stream:
+IU.HRV.00.LH1 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.00.LH2 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.00.LHZ | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.10.LH1 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.10.LH2 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.10.LHZ | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+['10']
+['10']
+['10']
+['10', '00']
+3 Trace(s) in Stream:
+IU.HRV.10.LHZ | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.10.LH2 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.10.LH1 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+3 Trace(s) in Stream:
+IU.HRV.00.LHZ | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.00.LH1 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.00.LH2 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+here
+('result: ', "   cov_x: array([[  1.37584235e+14]])\n    fjac: array([[ -8.52541766e-08]])\n     fun: 0.0014098883127897643\n    ipvt: array([1], dtype=int32)\n message: 'Both actual and predicted relative reductions in the sum of squares\\n  are at most 0.000000'\n    nfev: 20\n     qtf: array([-0.00140989])\n  status: 1\n success: True\n       x: array([ 2.01002884])")
+Here is theta: 2.01002884153
+Here is the residual: 0.00140988831279
+['00']
+['00']
+On day: 003
+6 Trace(s) in Stream:
+IU.HRV.00.LH1 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.00.LH2 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.00.LHZ | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.10.LH1 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.10.LH2 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.10.LHZ | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+['10']
+['10']
+['10']
+['10', '00']
+3 Trace(s) in Stream:
+IU.HRV.10.LHZ | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.10.LH2 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.10.LH1 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+3 Trace(s) in Stream:
+IU.HRV.00.LHZ | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.00.LH1 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.00.LH2 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+here
+('result: ', "   cov_x: array([[  2.49924728e+14]])\n    fjac: array([[  6.32550766e-08]])\n     fun: 0.0015841449433802168\n    ipvt: array([1], dtype=int32)\n message: 'Both actual and predicted relative reductions in the sum of squares\\n  are at most 0.000000'\n    nfev: 18\n     qtf: array([-0.00158414])\n  status: 1\n success: True\n       x: array([ 1.76694481])")
+Here is theta: 1.76694480911
+Here is the residual: 0.00158414494338
+['00']
+['00']
+On day: 004
+6 Trace(s) in Stream:
+IU.HRV.00.LH1 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.00.LH2 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.00.LHZ | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.10.LH1 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.10.LH2 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.10.LHZ | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+['10']
+['10']
+['10']
+['10', '00']
+3 Trace(s) in Stream:
+IU.HRV.10.LHZ | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.10.LH2 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.10.LH1 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+3 Trace(s) in Stream:
+IU.HRV.00.LHZ | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.00.LH1 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.HRV.00.LH2 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+here
+('result: ', "   cov_x: array([[  3.20425246e+12]])\n    fjac: array([[ -5.58645927e-07]])\n     fun: 0.0016737370252164485\n    ipvt: array([1], dtype=int32)\n message: 'Both actual and predicted relative reductions in the sum of squares\\n  are at most 0.000000'\n    nfev: 17\n     qtf: array([-0.00167374])\n  status: 1\n success: True\n       x: array([ 0.28007399])")
+Here is theta: 0.28007398773
+Here is the residual: 0.00167373702522
+['00']
+['00']
+On sta: IU_PAB
+On day: 001
+6 Trace(s) in Stream:
+IU.PAB.00.LH1 | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LH2 | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LHZ | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH1 | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH2 | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LHZ | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+['00']
+['00']
+['00']
+['10', '00']
+3 Trace(s) in Stream:
+IU.PAB.10.LH1 | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH2 | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LHZ | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+3 Trace(s) in Stream:
+IU.PAB.00.LH2 | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LH1 | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LHZ | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+here
+('result: ', "   cov_x: array([[  2.78842013e+14]])\n    fjac: array([[ -5.98853918e-08]])\n     fun: 0.0032456155715686608\n    ipvt: array([1], dtype=int32)\n message: 'Both actual and predicted relative reductions in the sum of squares\\n  are at most 0.000000'\n    nfev: 22\n     qtf: array([-0.00324562])\n  status: 1\n success: True\n       x: array([-89.08061894])")
+Here is theta: -89.0806189399
+Here is the residual: 0.00324561557157
+opening file ./Results_IU_PAB
+['10', '00']
+3 Trace(s) in Stream:
+IU.PAB.10.LH1 | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH2 | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LHZ | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+3 Trace(s) in Stream:
+IU.PAB.00.LH2 | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LH1 | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LHZ | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+here
+('result: ', "   cov_x: array([[  2.78842013e+14]])\n    fjac: array([[ -5.98853918e-08]])\n     fun: 0.0032456155715686608\n    ipvt: array([1], dtype=int32)\n message: 'Both actual and predicted relative reductions in the sum of squares\\n  are at most 0.000000'\n    nfev: 22\n     qtf: array([-0.00324562])\n  status: 1\n success: True\n       x: array([-89.08061894])")
+Here is theta: -89.0806189399
+Here is the residual: 0.00324561557157
+['10', '00']
+3 Trace(s) in Stream:
+IU.PAB.10.LH1 | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH2 | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LHZ | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+3 Trace(s) in Stream:
+IU.PAB.00.LH2 | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LH1 | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LHZ | 2016-01-01T00:00:00.069500Z - 2016-01-01T01:00:00.069500Z | 1.0 Hz, 3601 samples
+here
+('result: ', "   cov_x: array([[  2.78842013e+14]])\n    fjac: array([[ -5.98853918e-08]])\n     fun: 0.0032456155715686608\n    ipvt: array([1], dtype=int32)\n message: 'Both actual and predicted relative reductions in the sum of squares\\n  are at most 0.000000'\n    nfev: 22\n     qtf: array([-0.00324562])\n  status: 1\n success: True\n       x: array([-89.08061894])")
+Here is theta: -89.0806189399
+Here is the residual: 0.00324561557157
+On day: 002
+6 Trace(s) in Stream:
+IU.PAB.00.LH1 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LH2 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LHZ | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH1 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH2 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LHZ | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+['00']
+['00']
+['00']
+['10', '00']
+3 Trace(s) in Stream:
+IU.PAB.10.LH1 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH2 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LHZ | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+3 Trace(s) in Stream:
+IU.PAB.00.LH2 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LH1 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LHZ | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+here
+('result: ', "   cov_x: array([[  1.83574222e+17]])\n    fjac: array([[ -2.33396399e-09]])\n     fun: 0.0034026645817811785\n    ipvt: array([1], dtype=int32)\n message: 'Both actual and predicted relative reductions in the sum of squares\\n  are at most 0.000000'\n    nfev: 23\n     qtf: array([-0.00340266])\n  status: 1\n success: True\n       x: array([-89.38280852])")
+Here is theta: -89.3828085204
+Here is the residual: 0.00340266458178
+['10', '00']
+3 Trace(s) in Stream:
+IU.PAB.10.LH1 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH2 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LHZ | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+3 Trace(s) in Stream:
+IU.PAB.00.LH2 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LH1 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LHZ | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+here
+('result: ', "   cov_x: array([[  1.83574222e+17]])\n    fjac: array([[ -2.33396399e-09]])\n     fun: 0.0034026645817811785\n    ipvt: array([1], dtype=int32)\n message: 'Both actual and predicted relative reductions in the sum of squares\\n  are at most 0.000000'\n    nfev: 23\n     qtf: array([-0.00340266])\n  status: 1\n success: True\n       x: array([-89.38280852])")
+Here is theta: -89.3828085204
+Here is the residual: 0.00340266458178
+['10', '00']
+3 Trace(s) in Stream:
+IU.PAB.10.LH1 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH2 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LHZ | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+3 Trace(s) in Stream:
+IU.PAB.00.LH2 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LH1 | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LHZ | 2016-01-02T00:00:00.069500Z - 2016-01-02T01:00:00.069500Z | 1.0 Hz, 3601 samples
+here
+('result: ', "   cov_x: array([[  1.83574222e+17]])\n    fjac: array([[ -2.33396399e-09]])\n     fun: 0.0034026645817811785\n    ipvt: array([1], dtype=int32)\n message: 'Both actual and predicted relative reductions in the sum of squares\\n  are at most 0.000000'\n    nfev: 23\n     qtf: array([-0.00340266])\n  status: 1\n success: True\n       x: array([-89.38280852])")
+Here is theta: -89.3828085204
+Here is the residual: 0.00340266458178
+On day: 003
+6 Trace(s) in Stream:
+IU.PAB.00.LH1 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LH2 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LHZ | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH1 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH2 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LHZ | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+['00']
+['00']
+['00']
+['10', '00']
+3 Trace(s) in Stream:
+IU.PAB.10.LH1 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH2 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LHZ | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+3 Trace(s) in Stream:
+IU.PAB.00.LH2 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LH1 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LHZ | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+here
+('result: ', "   cov_x: array([[  5.68808587e+17]])\n    fjac: array([[  1.32591880e-09]])\n     fun: 0.0031873792490736408\n    ipvt: array([1], dtype=int32)\n message: 'Both actual and predicted relative reductions in the sum of squares\\n  are at most 0.000000'\n    nfev: 25\n     qtf: array([-0.00318738])\n  status: 1\n success: True\n       x: array([-89.9069307])")
+Here is theta: -89.9069306993
+Here is the residual: 0.00318737924907
+['10', '00']
+3 Trace(s) in Stream:
+IU.PAB.10.LH1 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH2 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LHZ | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+3 Trace(s) in Stream:
+IU.PAB.00.LH2 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LH1 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LHZ | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+here
+('result: ', "   cov_x: array([[  5.68808587e+17]])\n    fjac: array([[  1.32591880e-09]])\n     fun: 0.0031873792490736408\n    ipvt: array([1], dtype=int32)\n message: 'Both actual and predicted relative reductions in the sum of squares\\n  are at most 0.000000'\n    nfev: 25\n     qtf: array([-0.00318738])\n  status: 1\n success: True\n       x: array([-89.9069307])")
+Here is theta: -89.9069306993
+Here is the residual: 0.00318737924907
+['10', '00']
+3 Trace(s) in Stream:
+IU.PAB.10.LH1 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH2 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LHZ | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+3 Trace(s) in Stream:
+IU.PAB.00.LH2 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LH1 | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LHZ | 2016-01-03T00:00:00.069500Z - 2016-01-03T01:00:00.069500Z | 1.0 Hz, 3601 samples
+here
+('result: ', "   cov_x: array([[  5.68808587e+17]])\n    fjac: array([[  1.32591880e-09]])\n     fun: 0.0031873792490736408\n    ipvt: array([1], dtype=int32)\n message: 'Both actual and predicted relative reductions in the sum of squares\\n  are at most 0.000000'\n    nfev: 25\n     qtf: array([-0.00318738])\n  status: 1\n success: True\n       x: array([-89.9069307])")
+Here is theta: -89.9069306993
+Here is the residual: 0.00318737924907
+On day: 004
+6 Trace(s) in Stream:
+IU.PAB.00.LH1 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LH2 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LHZ | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH1 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH2 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LHZ | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+['00']
+['00']
+['00']
+['10', '00']
+3 Trace(s) in Stream:
+IU.PAB.10.LH1 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH2 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LHZ | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+3 Trace(s) in Stream:
+IU.PAB.00.LH2 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LH1 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LHZ | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+here
+('result: ', "   cov_x: array([[  2.74703356e+17]])\n    fjac: array([[ -1.90795452e-09]])\n     fun: 0.002983047820180551\n    ipvt: array([1], dtype=int32)\n message: 'Both actual and predicted relative reductions in the sum of squares\\n  are at most 0.000000'\n    nfev: 25\n     qtf: array([-0.00298305])\n  status: 1\n success: True\n       x: array([-89.81521958])")
+Here is theta: -89.8152195848
+Here is the residual: 0.00298304782018
+['10', '00']
+3 Trace(s) in Stream:
+IU.PAB.10.LH1 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH2 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LHZ | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+3 Trace(s) in Stream:
+IU.PAB.00.LH2 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LH1 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LHZ | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+here
+('result: ', "   cov_x: array([[  2.74703356e+17]])\n    fjac: array([[ -1.90795452e-09]])\n     fun: 0.002983047820180551\n    ipvt: array([1], dtype=int32)\n message: 'Both actual and predicted relative reductions in the sum of squares\\n  are at most 0.000000'\n    nfev: 25\n     qtf: array([-0.00298305])\n  status: 1\n success: True\n       x: array([-89.81521958])")
+Here is theta: -89.8152195848
+Here is the residual: 0.00298304782018
+['10', '00']
+3 Trace(s) in Stream:
+IU.PAB.10.LH1 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LH2 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.10.LHZ | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+3 Trace(s) in Stream:
+IU.PAB.00.LH2 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LH1 | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+IU.PAB.00.LHZ | 2016-01-04T00:00:00.069500Z - 2016-01-04T01:00:00.069500Z | 1.0 Hz, 3601 samples
+here
+('result: ', "   cov_x: array([[  2.74703356e+17]])\n    fjac: array([[ -1.90795452e-09]])\n     fun: 0.002983047820180551\n    ipvt: array([1], dtype=int32)\n message: 'Both actual and predicted relative reductions in the sum of squares\\n  are at most 0.000000'\n    nfev: 25\n     qtf: array([-0.00298305])\n  status: 1\n success: True\n       x: array([-89.81521958])")
+Here is theta: -89.8152195848
+Here is the residual: 0.00298304782018
+On sta: IU_TRIS
+On day: 001

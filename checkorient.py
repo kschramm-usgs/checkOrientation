@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from obspy.core import read, UTCDateTime
+import os
 import glob
 import sys
 import numpy as np
@@ -64,6 +65,9 @@ if __name__ == "__main__":
         #if True:
         # format the string
             string = '/msd/' + sta + '/' + str(ctime.year) + '/' + day + '/*LH*'
+        # check for data before reading in:
+            if not os.path.isfile(string):
+                continue
         # read in the data
         # Just grab one hour we might want to change this
             st = read(string, starttime=ctime, endtime=ctime+60.*60)
