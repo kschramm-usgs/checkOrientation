@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 from obspy.core import read, UTCDateTime
+import os
 import glob
 import sys
 import numpy as np
@@ -28,13 +29,14 @@ class Rotation:
 # start of the main program
 if __name__ == "__main__":
     net = 'IU'
+    station = "*"
 # Here is our start and end time
     stime = UTCDateTime('2016-001T00:00:00.0')
     etime = UTCDateTime('2016-005T00:00:00.0')
     ctime = stime
 
 # Grab all the stations
-    stas = glob.glob('/msd/' + net + '_*/' +  str(stime.year) )
+    stas = glob.glob('/msd/' + net + '_*'+station+'/' +  str(stime.year) )
     if debug:
         print stas
 
@@ -59,6 +61,7 @@ if __name__ == "__main__":
             day = str(ctime.julday).zfill(3)
             if debug:
                 print('On day: ' + day)
+<<<<<<< HEAD
             try:
 				# format the string
 				string = '/msd/' + sta + '/' + str(ctime.year) + '/' + day + '/*LH*'
@@ -122,6 +125,82 @@ if __name__ == "__main__":
         #out of the station loop - move on to next station...
         ctime = stime
         # close the old file
+=======
+            #try:
+        #if True:
+        # format the string
+            string = '/msd/' + sta + '/' + str(ctime.year) + '/' + day + '/*LH*'
+        # check for data before reading in:
+        #    if not os.path.isfile(string):
+        #        continue
+        # read in the data
+        # Just grab one hour we might want to change this
+            try:
+                st = read(string, starttime=ctime, endtime=ctime+60.*60)
+            except:
+                print('no data for '+ string)
+                #better increment....
+                ctime += 24.*60.*60.
+                continue
+            if debug:
+                print(st)
+            st.detrend('demean')
+            st.merge()
+            st.filter('bandpass',freqmin=1./8., freqmax=1./4.)
+            st.taper(0.05)
+        # okay time to process the relative orientation
+        # We need to grab the different locations
+            locs = []
+            for tr in st:
+                locs.append(str(tr.stats.location))
+                locs = list(set(locs))
+                if debug:
+                    print(locs)
+            # We now have all the location codes for the station
+                if len(locs) >= 2:
+        # We have at least two sensors so compare the azimuth
+        # First one will be the reference
+                    refloc = locs.pop(0)
+                    stref = st.select(location=refloc)
+                    for loc in locs:
+                        sttest = st.select(location=loc)
+                        if debug:
+                            print(stref)
+                            print(sttest)
+            #rotdata is an object that stores the data and has
+            #the rotation method.
+                        rotdata=Rotation(stref,sttest)
+            #root function - finds the roots of the rotation
+            #method. lm is the levenberg-marquardt method
+                        print('here')
+                        result = root(rotdata.rot, 0., method = 'lm')
+            #not sure what this line is doing.
+                        theta = result['x'][0]
+            #what is fun?
+                        resi = result['fun'] 
+                        print('result: ',str(result))
+                        if debug:
+                            print('Here is theta: ' + str(theta))
+                            print('Here is the residual: ' + str(resi))
+                        fileName='./Results_'+sta
+                        if os.path.isfile(fileName):
+                            f.write(refloc +', '+ loc +', '+ day +', ' + str(ctime.year) + ', ' + str(theta) + ', ' + str(resi) + '\n')
+                        else:
+                            print('opening file '+fileName)
+                            f=open(fileName, 'w')
+                            f.write('ReferenceLoc, TestLoc, day, year, theta, residual\n')
+                    
+                    
+            # in the while ctime .lt. etime - need to increment this by a day.
+            ctime += 24.*60.*60.
+        # done with that station, exit the while loop.
+        ctime = stime
+
+        # close the file when you exit the while loop
+>>>>>>> notry
         if 'f' in globals():
             f.close()
 
+                    #sys.exit()
+        #    except:
+        #        print('Problem with ' + sta + ' on day ' + day)
