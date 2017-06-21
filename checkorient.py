@@ -28,7 +28,7 @@ class Rotation:
 # start of the main program
 if __name__ == "__main__":
     net = 'IU'
-    station = "ANTO"
+    station = "*"
 # Here is our start and end time
     stime = UTCDateTime('2016-001T00:00:00.0')
     etime = UTCDateTime('2016-005T00:00:00.0')
@@ -107,19 +107,24 @@ if __name__ == "__main__":
                         if debug:
                             print('Here is theta: ' + str(theta))
                             print('Here is the residual: ' + str(resi))
-                        if 'f' not in globals():
-                            print('opening file')
-                            f=open('Results_' + sta, 'w')
+                        fileName='./Results_'+sta
+                        if os.path.isfile(fileName):
+                            f.write(refloc +', '+ loc +', '+ day +', ' + str(ctime.year) + ', ' + str(theta) + ', ' + str(resi) + '\n')
+                        else:
+                            print('opening file '+fileName)
+                            f=open(fileName, 'w')
                             f.write('ReferenceLoc, TestLoc, day, year, theta, residual\n')
-                        f.write(refloc +', '+ loc +', '+ day +', ' + str(ctime.year) + ', ' + str(theta) + ', ' + str(resi) + '\n')
                     
                     
-                    #sys.exit()
-                    
-        #    except:
-        #        print('Problem with ' + sta + ' on day ' + day)
+            # in the while ctime .lt. etime - need to increment this by a day.
             ctime += 24.*60.*60.
+        # done with that station, exit the while loop.
         ctime = stime
+
+        # close the file when you exit the while loop
         if 'f' in globals():
             f.close()
 
+                    #sys.exit()
+        #    except:
+        #        print('Problem with ' + sta + ' on day ' + day)
