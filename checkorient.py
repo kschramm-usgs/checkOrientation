@@ -66,11 +66,15 @@ if __name__ == "__main__":
         # format the string
             string = '/msd/' + sta + '/' + str(ctime.year) + '/' + day + '/*LH*'
         # check for data before reading in:
-            if not os.path.isfile(string):
-                continue
+        #    if not os.path.isfile(string):
+        #        continue
         # read in the data
         # Just grab one hour we might want to change this
-            st = read(string, starttime=ctime, endtime=ctime+60.*60)
+            try:
+                st = read(string, starttime=ctime, endtime=ctime+60.*60)
+            except:
+                print('no data for '+ string)
+                continue
             if debug:
                 print(st)
             st.detrend('demean')
