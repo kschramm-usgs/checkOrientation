@@ -74,6 +74,8 @@ if __name__ == "__main__":
                 st = read(string, starttime=ctime, endtime=ctime+60.*60)
             except:
                 print('no data for '+ string)
+                #better increment....
+                ctime += 24.*60.*60.
                 continue
             if debug:
                 print(st)
