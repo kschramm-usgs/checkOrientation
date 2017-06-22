@@ -99,8 +99,21 @@ if __name__ == "__main__":
         # First one will be the reference
                     refloc = locs.pop(0)
                     stref = st.select(location=refloc)
+                    #make sure we have 3 component data 
+                    if (stref.count() < 3) :
+                        print('No 3 component data: '+ string)
+                        #better increment....
+                        ctime += 24.*60.*60.
+                        continue
+
                     for loc in locs:
                         sttest = st.select(location=loc)
+                        #make sure we have 3 component data 
+                        if (sttest.count() < 3) :
+                            print('No 3 component data: '+ string)
+                            #better increment....
+                            ctime += 24.*60.*60.
+                            continue
                         if debug:
                             print(stref)
                             print(sttest)
@@ -117,17 +130,21 @@ if __name__ == "__main__":
             #This is the value of the residual function you are minimizing
                         resiNS = resultNS['fun'] 
                         resiEW = resultEW['fun'] 
-                        print('result: ',str(result))
+                        print('resultNS: ',str(resultNS))
+                        print('resultEW: ',str(resultEW))
                         if debug:
-                            print('Here is theta: ' + str(theta))
-                            print('Here is the residual: ' + str(resi))
+                            print('Here is thetaNS: ' + str(thetaNS))
+                            print('Here is the residualEW: ' + str(resiEW))
+                            print('Here is thetaEW: ' + str(thetaEW))
+                            print('Here is the residualEW: ' + str(resiEW))
                         fileName='./Results_'+sta
                         if os.path.isfile(fileName):
-                            f.write(refloc +', '+ loc +', '+ day +', ' + str(ctime.year) + ', ' + str(theta) + ', ' + str(resi) + '\n')
+                            f.write(refloc +', '+ loc +', '+ day +', ' + str(ctime.year) + ', NS,' + str(thetaNS) + ', ' + str(resiNS) + '\n')
+                            f.write(refloc +', '+ loc +', '+ day +', ' + str(ctime.year) + ', EW,' + str(thetaEW) + ', ' + str(resiEW) + '\n')
                         else:
                             print('opening file '+fileName)
                             f=open(fileName, 'w')
-                            f.write('ReferenceLoc, TestLoc, day, year, theta, residual\n')
+                            f.write('ReferenceLoc, TestLoc, day, year, comp, theta, residual\n')
                     
                     
             # in the while ctime .lt. etime - need to increment this by a day.
