@@ -105,10 +105,10 @@ if __name__ == "__main__":
                         #better increment....
                         ctime += 24.*60.*60.
                         continue
-
+        # now the test stream
                     for loc in locs:
                         sttest = st.select(location=loc)
-                        #make sure we have 3 component data 
+                    # make sure we have 3 component data 
                         if (sttest.count() < 3) :
                             print('No 3 component data: '+ string)
                             #better increment....
@@ -117,6 +117,27 @@ if __name__ == "__main__":
                         if debug:
                             print(stref)
                             print(sttest)
+                    # now make sure that we have teh same number of samples
+                        if stref[0].count() != stref[1].count:
+                            print('samples not the same')
+                            ctime += 24.*60.*60.
+                            continue
+                        else stref[0].count() != stref[2].count:
+                            print('samples not the same')
+                            ctime += 24.*60.*60.
+                            continue
+                        else stref[0].count() != sttest[0].count:
+                            print('samples not the same')
+                            ctime += 24.*60.*60.
+                            continue
+                        else stref[0].count() != sttest[1].count:
+                            print('samples not the same')
+                            ctime += 24.*60.*60.
+                            continue
+                        else stref[0].count() != sttest[2].count:
+                            print('samples not the same')
+                            ctime += 24.*60.*60.
+                            continue
             #rotdata is an object that stores the data and has
             #the rotation method.
                         rotdata=Rotation(stref,sttest)
@@ -138,13 +159,14 @@ if __name__ == "__main__":
                             print('Here is thetaEW: ' + str(thetaEW))
                             print('Here is the residualEW: ' + str(resiEW))
                         fileName='./Results_'+sta
-                        if os.path.isfile(fileName):
-                            f.write(refloc +', '+ loc +', '+ day +', ' + str(ctime.year) + ', NS,' + str(thetaNS) + ', ' + str(resiNS) + '\n')
-                            f.write(refloc +', '+ loc +', '+ day +', ' + str(ctime.year) + ', EW,' + str(thetaEW) + ', ' + str(resiEW) + '\n')
-                        else:
+                        # not sure if this is in the correct place.
+                        if not os.path.isfile(fileName):
                             print('opening file '+fileName)
                             f=open(fileName, 'w')
                             f.write('ReferenceLoc, TestLoc, day, year, comp, theta, residual\n')
+                        else:
+                            f.write(refloc +', '+ loc +', '+ day +', ' + str(ctime.year) + ', NS,' + str(thetaNS) + ', ' + str(resiNS) + '\n')
+                            f.write(refloc +', '+ loc +', '+ day +', ' + str(ctime.year) + ', EW,' + str(thetaEW) + ', ' + str(resiEW) + '\n')
                     
                     
             # in the while ctime .lt. etime - need to increment this by a day.
