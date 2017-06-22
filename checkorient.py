@@ -39,7 +39,7 @@ if __name__ == "__main__":
     station = "GUMO"
 # Here is our start and end time
     stime = UTCDateTime('2016-001T00:00:00.0')
-    etime = UTCDateTime('2016-006T00:00:00.0')
+    etime = UTCDateTime('2016-010T00:00:00.0')
     ctime = stime
 
 # Grab all the stations
@@ -63,7 +63,7 @@ if __name__ == "__main__":
     for sta in stas:
         if debug:
             print('On sta: ' + sta)
-        while ctime < etime:
+        while ctime <= etime:
         
             day = str(ctime.julday).zfill(3)
             if debug:
