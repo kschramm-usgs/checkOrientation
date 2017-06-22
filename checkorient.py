@@ -90,85 +90,85 @@ if __name__ == "__main__":
             locs = []
             for tr in st:
                 locs.append(str(tr.stats.location))
-                locs = list(set(locs))
-                if debug:
-                    print(locs)
+            locs = list(set(locs))
+            if debug:
+                print(locs)
             # We now have all the location codes for the station
-                if len(locs) >= 2:
+            if len(locs) >= 2:
         # We have at least two sensors so compare the azimuth
         # First one will be the reference
-                    refloc = locs.pop(0)
-                    stref = st.select(location=refloc)
-                    #make sure we have 3 component data 
-                    if (stref.count() < 3) :
+                refloc = locs.pop(0)
+                stref = st.select(location=refloc)
+        #make sure we have 3 component data 
+                if (stref.count() < 3) :
+                    print('No 3 component data: '+ string)
+                    #better increment....
+                    ctime += 24.*60.*60.
+                    continue
+        # now the test stream
+                for loc in locs:
+                    sttest = st.select(location=loc)
+        # make sure we have 3 component data 
+                    if (sttest.count() < 3) :
                         print('No 3 component data: '+ string)
                         #better increment....
                         ctime += 24.*60.*60.
                         continue
-        # now the test stream
-                    for loc in locs:
-                        sttest = st.select(location=loc)
-                    # make sure we have 3 component data 
-                        if (sttest.count() < 3) :
-                            print('No 3 component data: '+ string)
-                            #better increment....
-                            ctime += 24.*60.*60.
-                            continue
-                        if debug:
-                            print(stref)
-                            print(sttest)
-                    # now make sure that we have the same number of samples
-                        if (stref[0].count() != stref[1].count()):
-                            print('samples not the same')
-                            ctime += 24.*60.*60.
-                            continue
-                        elif (stref[0].count() != stref[2].count()):
-                            print('samples not the same')
-                            ctime += 24.*60.*60.
-                            continue
-                        elif stref[0].count() != sttest[0].count():
-                            print('samples not the same')
-                            ctime += 24.*60.*60.
-                            continue
-                        elif stref[0].count() != sttest[1].count():
-                            print('samples not the same')
-                            ctime += 24.*60.*60.
-                            continue
-                        elif stref[0].count() != sttest[2].count():
-                            print('samples not the same')
-                            ctime += 24.*60.*60.
-                            continue
-            #rotdata is an object that stores the data and has
-            #the rotation method.
-                        rotdata=Rotation(stref,sttest)
-            #root function - finds the roots of the rotation
-            #method. lm is the levenberg-marquardt method
-                        resultNS = root(rotdata.rotNS, 0., method = 'lm')
-                        resultEW = root(rotdata.rotEW, 0., method = 'lm')
-            #grab the results from the minimization problem
-                        thetaNS = resultNS['x'][0]
-                        thetaEW = resultEW['x'][0]
-            #This is the value of the residual function you are minimizing
-                        resiNS = resultNS['fun'] 
-                        resiEW = resultEW['fun'] 
-                        print('resultNS: ',str(resultNS))
-                        print('resultEW: ',str(resultEW))
-                        if debug:
-                            print('Here is thetaNS: ' + str(thetaNS))
-                            print('Here is the residualEW: ' + str(resiEW))
-                            print('Here is thetaEW: ' + str(thetaEW))
-                            print('Here is the residualEW: ' + str(resiEW))
-                        fileName='./Results_'+sta
-                        # not sure if this is in the correct place.
-                        if not os.path.isfile(fileName):
-                            print('opening file '+fileName)
-                            f=open(fileName, 'w')
-                            f.write('ReferenceLoc, TestLoc, day, year, comp, theta, residual\n')
-                        else:
-                            f.write(refloc +', '+ loc +', '+ day +', ' + str(ctime.year) + ', NS,' + str(thetaNS) + ', ' + str(resiNS) + '\n')
-                            f.write(refloc +', '+ loc +', '+ day +', ' + str(ctime.year) + ', EW,' + str(thetaEW) + ', ' + str(resiEW) + '\n')
-                    
-                    
+                    if debug:
+                        print(stref)
+                        print(sttest)
+                # now make sure that we have the same number of samples
+                    if (stref[0].count() != stref[1].count()):
+                        print('samples not the same')
+                        ctime += 24.*60.*60.
+                        continue
+                    elif (stref[0].count() != stref[2].count()):
+                        print('samples not the same')
+                        ctime += 24.*60.*60.
+                        continue
+                    elif stref[0].count() != sttest[0].count():
+                        print('samples not the same')
+                        ctime += 24.*60.*60.
+                        continue
+                    elif stref[0].count() != sttest[1].count():
+                        print('samples not the same')
+                        ctime += 24.*60.*60.
+                        continue
+                    elif stref[0].count() != sttest[2].count():
+                        print('samples not the same')
+                        ctime += 24.*60.*60.
+                        continue
+        #rotdata is an object that stores the data and has
+        #the rotation method.
+                    rotdata=Rotation(stref,sttest)
+        #root function - finds the roots of the rotation
+        #method. lm is the levenberg-marquardt method
+                    resultNS = root(rotdata.rotNS, 0., method = 'lm')
+                    resultEW = root(rotdata.rotEW, 0., method = 'lm')
+        #grab the results from the minimization problem
+                    thetaNS = resultNS['x'][0]
+                    thetaEW = resultEW['x'][0]
+        #This is the value of the residual function you are minimizing
+                    resiNS = resultNS['fun'] 
+                    resiEW = resultEW['fun'] 
+                    print('resultNS: ',str(resultNS))
+                    print('resultEW: ',str(resultEW))
+                    if debug:
+                        print('Here is thetaNS: ' + str(thetaNS))
+                        print('Here is the residualEW: ' + str(resiEW))
+                        print('Here is thetaEW: ' + str(thetaEW))
+                        print('Here is the residualEW: ' + str(resiEW))
+                    fileName='./Results_'+sta
+                    # not sure if this is in the correct place.
+                    if not os.path.isfile(fileName):
+                        print('opening file '+fileName)
+                        f=open(fileName, 'w')
+                        f.write('ReferenceLoc, TestLoc, day, year, comp, theta, residual\n')
+                    else:
+                        f.write(refloc +', '+ loc +', '+ day +', ' + str(ctime.year) + ', NS,' + str(thetaNS) + ', ' + str(resiNS) + '\n')
+                        f.write(refloc +', '+ loc +', '+ day +', ' + str(ctime.year) + ', EW,' + str(thetaEW) + ', ' + str(resiEW) + '\n')
+                
+                
             # in the while ctime .lt. etime - need to increment this by a day.
             ctime += 24.*60.*60.
         # done with that station, exit the while loop.
