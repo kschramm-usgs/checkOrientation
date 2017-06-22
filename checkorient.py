@@ -39,7 +39,7 @@ if __name__ == "__main__":
     station = "GUMO"
 # Here is our start and end time
     stime = UTCDateTime('2016-001T00:00:00.0')
-    etime = UTCDateTime('2016-005T00:00:00.0')
+    etime = UTCDateTime('2016-006T00:00:00.0')
     ctime = stime
 
 # Grab all the stations
@@ -138,6 +138,13 @@ if __name__ == "__main__":
                         print('samples not the same')
                         ctime += 24.*60.*60.
                         continue
+                    # we seem to have passed all the tests, so see if there is a file that needs opening
+                    fileName='./Results_'+sta
+                    if not os.path.isfile(fileName):
+                        print('opening file '+fileName)
+                        f=open(fileName, 'w')
+                        f.write('ReferenceLoc, TestLoc, day, year, comp, \
+                                NS theta, NS residual, EW theta, EW residual\n')
         #rotdata is an object that stores the data and has
         #the rotation method.
                     rotdata=Rotation(stref,sttest)
@@ -158,16 +165,11 @@ if __name__ == "__main__":
                         print('Here is the residualEW: ' + str(resiEW))
                         print('Here is thetaEW: ' + str(thetaEW))
                         print('Here is the residualEW: ' + str(resiEW))
-                    fileName='./Results_'+sta
-                    # not sure if this is in the correct place.
-                    if not os.path.isfile(fileName):
-                        print('opening file '+fileName)
-                        f=open(fileName, 'w')
-                        f.write('ReferenceLoc, TestLoc, day, year, comp, theta, residual\n')
-                    else:
-                        f.write(refloc +', '+ loc +', '+ day +', ' + str(ctime.year) + ', NS,' + str(thetaNS) + ', ' + str(resiNS) + '\n')
-                        f.write(refloc +', '+ loc +', '+ day +', ' + str(ctime.year) + ', EW,' + str(thetaEW) + ', ' + str(resiEW) + '\n')
-                
+                   
+                    # write results to file.
+                    f.write(refloc +', '+ loc +', '+ day +', ' +  \
+                            str(ctime.year) + ', ' + str(thetaNS) + ', ' + \
+                            str(resiNS) + ', ' + str(thetaEW) + ', ' + str(resiEW) + '\n')
                 
             # in the while ctime .lt. etime - need to increment this by a day.
             ctime += 24.*60.*60.
