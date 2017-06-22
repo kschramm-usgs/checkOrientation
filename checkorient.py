@@ -36,7 +36,7 @@ class Rotation:
 # start of the main program
 if __name__ == "__main__":
     net = 'IU'
-    station = "*"
+    station = "GUMO"
 # Here is our start and end time
     stime = UTCDateTime('2016-001T00:00:00.0')
     etime = UTCDateTime('2016-005T00:00:00.0')
@@ -117,24 +117,24 @@ if __name__ == "__main__":
                         if debug:
                             print(stref)
                             print(sttest)
-                    # now make sure that we have teh same number of samples
-                        if stref[0].count() != stref[1].count:
+                    # now make sure that we have the same number of samples
+                        if (stref[0].count() != stref[1].count()):
                             print('samples not the same')
                             ctime += 24.*60.*60.
                             continue
-                        else stref[0].count() != stref[2].count:
+                        elif (stref[0].count() != stref[2].count()):
                             print('samples not the same')
                             ctime += 24.*60.*60.
                             continue
-                        else stref[0].count() != sttest[0].count:
+                        elif stref[0].count() != sttest[0].count():
                             print('samples not the same')
                             ctime += 24.*60.*60.
                             continue
-                        else stref[0].count() != sttest[1].count:
+                        elif stref[0].count() != sttest[1].count():
                             print('samples not the same')
                             ctime += 24.*60.*60.
                             continue
-                        else stref[0].count() != sttest[2].count:
+                        elif stref[0].count() != sttest[2].count():
                             print('samples not the same')
                             ctime += 24.*60.*60.
                             continue
