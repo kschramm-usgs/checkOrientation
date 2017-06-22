@@ -36,10 +36,10 @@ class Rotation:
 # start of the main program
 if __name__ == "__main__":
     net = 'IU'
-    station = "GUMO"
+    station = "*"
 # Here is our start and end time
     stime = UTCDateTime('2016-001T00:00:00.0')
-    etime = UTCDateTime('2016-010T00:00:00.0')
+    etime = UTCDateTime('2016-031T00:00:00.0')
     ctime = stime
 
 # Grab all the stations
@@ -81,6 +81,11 @@ if __name__ == "__main__":
                 continue
             if debug:
                 print(st)
+            # look for gaps or masked values:
+            if (st.get_gaps()): 
+                print('Data has gaps')
+                ctime += 24.*60.*60.
+                continue
             st.detrend('demean')
             st.merge()
             st.filter('bandpass',freqmin=1./8., freqmax=1./4.)
@@ -138,6 +143,7 @@ if __name__ == "__main__":
                         print('samples not the same')
                         ctime += 24.*60.*60.
                         continue
+
                     # we seem to have passed all the tests, so see if there is a file that needs opening
                     fileName='./Results_'+sta
                     if not os.path.isfile(fileName):
