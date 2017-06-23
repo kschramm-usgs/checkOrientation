@@ -4,8 +4,11 @@ from obspy.core import read, UTCDateTime
 import os
 import glob
 import sys
+import math
 import numpy as np
+from time import gmtime, strftime
 from scipy.optimize import root
+from obspy.io.xseed import Parser
 debug = True
 
 class Rotation:
@@ -16,9 +19,9 @@ class Rotation:
 # This function is used to rotate the data
     def rotNS(self,theta):
         theta = theta % 360.
-        cosd=np.cos(np.deg2rad(theta))
-        sind=np.sin(np.deg2rad(theta))
-        data1 = cosd*self.sttest[0].data -sind*self.sttest[1].data
+        cosd=np.cos(np.deg2rad(-theta))
+        sind=np.sin(np.deg2rad(-theta))
+        data1 = cosd*self.sttest[0].data + sind*self.sttest[1].data
         resi = (abs(sum(data1*self.stref[0].data)/
                 np.sqrt(sum(data1**2)*sum(self.stref[0].data**2)) -1.))
         return resi
@@ -26,21 +29,58 @@ class Rotation:
 # This function is used to rotate the data
     def rotEW(self,theta):
         theta = theta % 360.
-        cosd=np.cos(np.deg2rad(theta))
-        sind=np.sin(np.deg2rad(theta))
-        data2 = sind*self.sttest[1].data + cosd*self.sttest[1].data
+        cosd=np.cos(-np.deg2rad(theta)- math.pi/2.)
+        sind=np.sin(-np.deg2rad(theta)- math.pi/2.)
+        data2 = sind*self.sttest[0].data - cosd*self.sttest[1].data
         resi = (abs(sum(data2*self.stref[1].data)/
                 np.sqrt(sum(data2**2)*sum(self.stref[1].data**2)) -1.))
         return resi
+        
+def getsncl(tr):
+    """ Return the sncl """
+    nslc = (tr.id).split('.')
+    return nslc[1], nslc[0], nslc[3], nslc[2]        
+        
+
+def getorientation(tr, sp):
+    """ 
+    A function to get the orientation of a station at a specific time from
+    the metadata.
+    """
+    sta, net, chan, loc = getsncl(tr)
+    evetime = tr.stats.starttime
+    for cursta in sp.stations:
+# As we scan through blockettes we need to find blockettes 50 and 52
+        for blkt in cursta:
+            if blkt.id == 50:
+# Pull the station info for blockette 50
+                stacall = blkt.station_call_letters.strip()
+            if stacall == sta:
+                if blkt.id == 52 and blkt.location_identifier == loc and blkt.channel_identifier == chan:
+                    if type(blkt.end_date) is str:
+                        curdoy = strftime("%j", gmtime())
+                        curyear = strftime("%Y", gmtime())
+                        curtime = UTCDateTime(curyear + "-" +
+                                              curdoy + "T00:00:00.0")
+                        if blkt.start_date <= evetime:
+                            azimuth = blkt.azimuth
+                    elif blkt.start_date <= evetime and blkt.end_date >= evetime:
+                        azimuth = blkt.azimuth
+    return azimuth
+
+
 ########################################################################
 # start of the main program
 if __name__ == "__main__":
     net = 'IU'
-    station = "*"
+    station = "HRV"
 # Here is our start and end time
     stime = UTCDateTime('2016-001T00:00:00.0')
     etime = UTCDateTime('2016-031T00:00:00.0')
     ctime = stime
+
+    sp = Parser('/APPS/metadata/SEED/' + net + '.dataless')
+
 
 # Grab all the stations
     stas = glob.glob('/msd/' + net + '_*'+station+'/' +  str(stime.year) )
@@ -104,6 +144,7 @@ if __name__ == "__main__":
         # First one will be the reference
                 refloc = locs.pop(0)
                 stref = st.select(location=refloc)
+                stref.sort(['channel'])
         #make sure we have 3 component data 
                 if (stref.count() < 3) :
                     print('No 3 component data: '+ string)
@@ -113,6 +154,7 @@ if __name__ == "__main__":
         # now the test stream
                 for loc in locs:
                     sttest = st.select(location=loc)
+                    sttest.sort(['channel'])
         # make sure we have 3 component data 
                     if (sttest.count() < 3) :
                         print('No 3 component data: '+ string)
@@ -123,6 +165,7 @@ if __name__ == "__main__":
                         print(stref)
                         print(sttest)
                 # now make sure that we have the same number of samples
+                # This is clunky and probably needs to be changed
                     if (stref[0].count() != stref[1].count()):
                         print('samples not the same')
                         ctime += 24.*60.*60.
@@ -144,13 +187,7 @@ if __name__ == "__main__":
                         ctime += 24.*60.*60.
                         continue
 
-                    # we seem to have passed all the tests, so see if there is a file that needs opening
-                    fileName='./Results_'+sta
-                    if not os.path.isfile(fileName):
-                        print('opening file '+fileName)
-                        f=open(fileName, 'w')
-                        f.write('ReferenceLoc, TestLoc, day, year, comp, \
-                                NS theta, NS residual, EW theta, EW residual\n')
+                    
         #rotdata is an object that stores the data and has
         #the rotation method.
                     rotdata=Rotation(stref,sttest)
@@ -167,15 +204,31 @@ if __name__ == "__main__":
                     print('resultNS: ',str(resultNS))
                     print('resultEW: ',str(resultEW))
                     if debug:
-                        print('Here is thetaNS: ' + str(thetaNS))
-                        print('Here is the residualEW: ' + str(resiEW))
-                        print('Here is thetaEW: ' + str(thetaEW))
-                        print('Here is the residualEW: ' + str(resiEW))
-                   
+                        print('Here is theta NS: ' + str(thetaNS))
+                        print('Here is the residual EW: ' + str(resiNS))
+                        print('Here is theta EW: ' + str(thetaEW))
+                        print('Here is the residual EW: ' + str(resiEW))
+                    # we seem to have passed all the tests, so see if there is a file that needs opening
+                    fileName='Results_' + sta
+                    # The previous logic is based on the existence not if python has a copy
+                    if debug:
+                        print('opening file '+fileName)
+                    if 'f' not in globals():
+                        f=open(fileName, 'w')
+                        f.write('ReferenceLoc, TestLoc, day, year, comp,' \
+                                'NS theta, NS residual, EW theta, EW residual, metadata Ref LH1,' \
+                                 'metadata Ref LH2, metadata Test LH1, metadata Test LH2\n')
                     # write results to file.
+                    Ref1 =getorientation(stref[0], sp)
+                    Ref2 =getorientation(stref[1], sp)
+                    Test1 = getorientation(sttest[0],sp)
+                    Test2 = getorientation(sttest[1], sp)
+                    # We have some results so lets also include metadata
+                    
                     f.write(refloc +', '+ loc +', '+ day +', ' +  \
                             str(ctime.year) + ', ' + str(thetaNS) + ', ' + \
-                            str(resiNS) + ', ' + str(thetaEW) + ', ' + str(resiEW) + '\n')
+                            str(resiNS) + ', ' + str(thetaEW) + ', ' + str(resiEW) + \
+                            ', ' + str(Ref1) + ', ' + str(Ref2) + ', ' + str(Test1) + ', ' + str(Test2) +  '\n')
                 
             # in the while ctime .lt. etime - need to increment this by a day.
             ctime += 24.*60.*60.
