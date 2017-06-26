@@ -31,10 +31,16 @@ class Rotation:
         theta = theta % 360.
         cosd=np.cos(-np.deg2rad(theta)- math.pi/2.)
         sind=np.sin(-np.deg2rad(theta)- math.pi/2.)
-        data2 = sind*self.sttest[0].data - cosd*self.sttest[1].data
+        data2 = sind*self.sttest[1].data - cosd*self.sttest[1].data
         resi = (abs(sum(data2*self.stref[1].data)/
                 np.sqrt(sum(data2**2)*sum(self.stref[1].data**2)) -1.))
         return resi
+    
+# This function gets the correlation of the data
+    def corrNS(self, windowLen):
+        windowLen = self.stref[0].data.length()/2
+        corValue = (self.stref,self.sttest,windowLen)
+        return corValue
         
 def getsncl(tr):
     """ Return the sncl """
@@ -73,7 +79,7 @@ def getorientation(tr, sp):
 # start of the main program
 if __name__ == "__main__":
     net = 'IU'
-    station = "HRV"
+    station = "*"
 # Here is our start and end time
     stime = UTCDateTime('2016-001T00:00:00.0')
     etime = UTCDateTime('2016-031T00:00:00.0')
@@ -213,12 +219,15 @@ if __name__ == "__main__":
                     # The previous logic is based on the existence not if python has a copy
                     if debug:
                         print('opening file '+fileName)
-                    if 'f' not in globals():
+                    # this if not in globals doesn't seem to work. going back to the other test.
+                    #if 'f' not in globals():
+                    # write results to file.
+                    if not os.path.isfile(fileName):
                         f=open(fileName, 'w')
                         f.write('ReferenceLoc, TestLoc, day, year, comp,' \
                                 'NS theta, NS residual, EW theta, EW residual, metadata Ref LH1,' \
                                  'metadata Ref LH2, metadata Test LH1, metadata Test LH2\n')
-                    # write results to file.
+                    # get metadata orientation values
                     Ref1 =getorientation(stref[0], sp)
                     Ref2 =getorientation(stref[1], sp)
                     Test1 = getorientation(sttest[0],sp)
