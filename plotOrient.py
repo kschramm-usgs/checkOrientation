@@ -24,12 +24,6 @@ for file in glob.glob("Result_*"):
             ax = plt.subplot(111, projection='polar')
             ax.set_theta_zero_location("N")
             ax.set_theta_direction(-1)
-# get the particle motion
-            #theta = np.arctan2(SignalBHN.data,SignalBHE.data)
-            #r = np.sqrt(SignalBHE.data*SignalBHE.data 
-            #      + SignalBHN.data*SignalBHN.data)
-# get the gradient on the particle motion
-            #gradPM = 
 # get the information for the lines
             calcR = [1., 1.]
             calcTheta = [np.radians(ang),np.radians(ang+180)]
