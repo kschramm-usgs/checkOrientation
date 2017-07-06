@@ -10,6 +10,7 @@ from time import gmtime, strftime
 from scipy.optimize import root
 from obspy.io.xseed import Parser
 debug = True
+debug = False 
 
 class Rotation:
     def __init__(self, stref, sttest):
@@ -39,7 +40,13 @@ class Rotation:
 # This function gets the correlation of the data
     def corrNS(self, windowLen):
         windowLen = self.stref[0].data.length()/2
-        corValue = (self.stref,self.sttest,windowLen)
+        corValue = (self.stref[0].data,self.sttest[0].data,windowLen)
+        return corValue
+
+# This function gets the correlation of the data
+    def corrEW(self, windowLen):
+        windowLen = self.stref[1].data.length()/2
+        corValue = (self.stref[1].data,self.sttest[1].data,windowLen)
         return corValue
         
 def getsncl(tr):
@@ -79,10 +86,10 @@ def getorientation(tr, sp):
 # start of the main program
 if __name__ == "__main__":
     net = 'IU'
-    station = "*"
+    station = "ANTO"
 # Here is our start and end time
-    stime = UTCDateTime('2017-001T00:00:00.0')
-    etime = UTCDateTime('2017-031T00:00:00.0')
+    stime = UTCDateTime('2016-001T00:00:00.0')
+    etime = UTCDateTime('2016-366T00:00:00.0')
     ctime = stime
 
     sp = Parser('/APPS/metadata/SEED/' + net + '.dataless')
@@ -107,10 +114,12 @@ if __name__ == "__main__":
 # check the relative orientation
 
     for sta in stas:
+# initialize arrays
+        thetaNS = [] 
+        thetaEW = [] 
         if debug:
             print('On sta: ' + sta)
         while ctime <= etime:
-        
             day = str(ctime.julday).zfill(3)
             if debug:
                 print('On day: ' + day)
@@ -153,7 +162,7 @@ if __name__ == "__main__":
                 stref.sort(['channel'])
         #make sure we have 3 component data 
                 if (stref.count() < 3) :
-                    print('No 3 component data: '+ string)
+                    #print('No 3 component data: '+ string)
                     #better increment....
                     ctime += 24.*60.*60.
                     continue
@@ -163,7 +172,7 @@ if __name__ == "__main__":
                     sttest.sort(['channel'])
         # make sure we have 3 component data 
                     if (sttest.count() < 3) :
-                        print('No 3 component data: '+ string)
+                        #print('No 3 component data: '+ string)
                         #better increment....
                         ctime += 24.*60.*60.
                         continue
@@ -173,23 +182,23 @@ if __name__ == "__main__":
                 # now make sure that we have the same number of samples
                 # This is clunky and probably needs to be changed
                     if (stref[0].count() != stref[1].count()):
-                        print('samples not the same')
+                        #print('samples not the same')
                         ctime += 24.*60.*60.
                         continue
                     elif (stref[0].count() != stref[2].count()):
-                        print('samples not the same')
+                        #print('samples not the same')
                         ctime += 24.*60.*60.
                         continue
                     elif stref[0].count() != sttest[0].count():
-                        print('samples not the same')
+                        #print('samples not the same')
                         ctime += 24.*60.*60.
                         continue
                     elif stref[0].count() != sttest[1].count():
-                        print('samples not the same')
+                        #print('samples not the same')
                         ctime += 24.*60.*60.
                         continue
                     elif stref[0].count() != sttest[2].count():
-                        print('samples not the same')
+                        #print('samples not the same')
                         ctime += 24.*60.*60.
                         continue
 
@@ -202,14 +211,21 @@ if __name__ == "__main__":
                     resultNS = root(rotdata.rotNS, 0., method = 'lm')
                     resultEW = root(rotdata.rotEW, 0., method = 'lm')
         #grab the results from the minimization problem
-                    thetaNS = resultNS['x'][0]
-                    thetaEW = resultEW['x'][0]
+                    thetaNS.append(resultNS['x'][0])
+                    if abs(resultNS['x'][0]) > 360:
+                        thetaNS[-1] = (thetaNS[-1] % 360)
+                    thetaEW.append(resultEW['x'][0])
         #This is the value of the residual function you are minimizing
                     resiNS = resultNS['fun'] 
                     resiEW = resultEW['fun'] 
-                    print('resultNS: ',str(resultNS))
-                    print('resultEW: ',str(resultEW))
+                    corrvalNS = rotdata.corrNS
+                    corrvalEW = rotdata.corrEW
+                    print(corrvalNS)
+
+                    print(corrvalEW)
                     if debug:
+                        print('resultNS: ',str(resultNS))
+                        print('resultEW: ',str(resultEW))
                         print('Here is theta NS: ' + str(thetaNS))
                         print('Here is the residual EW: ' + str(resiNS))
                         print('Here is theta EW: ' + str(thetaEW))
@@ -228,30 +244,32 @@ if __name__ == "__main__":
                                 'NS theta, NS residual, EW theta, EW residual, metadata Ref LH1,' \
                                  'metadata Ref LH2, metadata Test LH1, metadata Test LH2\n')
                     # get metadata orientation values
-                    Ref1[nd] = getorientation(stref[0], sp)
-                    Ref2[nd] = getorientation(stref[1], sp)
-                    Test1[nd] = getorientation(sttest[0],sp)
-                    Test2[nd] = getorientation(sttest[1], sp)
-                    # We have some results so lets also include metadata
-                    
+                    Ref1 = getorientation(stref[0], sp)
+                    Ref2 = getorientation(stref[1], sp)
+                    Test1 = getorientation(sttest[0],sp)
+                    Test2 = getorientation(sttest[1], sp)
+
+                    # Write some results and include metadata
+                    # the index [-1] will print the last value in the list
                     f.write(refloc +', '+ loc +', '+ day +', ' +  \
-                            str(ctime.year) + ', ' + str(thetaNS) + ', ' + \
-                            str(resiNS) + ', ' + str(thetaEW) + ', ' + str(resiEW) + \
+                            str(ctime.year) + ', ' + str(thetaNS[-1]) + ', ' + \
+                            str(resiNS) + ', ' + str(thetaEW[-1]) + ', ' + str(resiEW) + \
                             ', ' + str(Ref1) + ', ' + str(Ref2) + ', ' + str(Test1) + ', ' + str(Test2) +  '\n')
                 
         # in the while ctime .lt. etime - need to increment this by a day.
             ctime += 24.*60.*60.
-        # keep track of the number of days we have...           
-            nd+=1
     # calculate some statistics...
-        Ref1Ave = Ref1Total/nd
-        Ref2Ave = Ref2Total/nd
-        Test1Ave = Test1Total/nd
-        Test2Ave = Test2Total/nd
-        Ref1Std = np.std
-        f.write(
+        thetaNSAve=np.average(thetaNS)
+        thetaEWAve=np.average(thetaEW)
+        thetaNSstd=np.std(thetaNS)
+        thetaEWstd=np.std(thetaEW)
+        print(thetaNSAve)
+        print(thetaNSstd)
+        print(thetaEWAve)
+        print(thetaEWstd)
+
+        f.write('NS Ave: '+ str(thetaNSAve)  +', std '+ str(thetaNSstd) +', EW Ave: '+ str(thetaEWAve) +', std: '+ str(thetaEWstd) +'\n')
     # done with that station, exit the while loop, reset ctime and numdays
-        nd = 0 
         ctime = stime
     # calculate the standard deviation and average    
 
