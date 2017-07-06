@@ -81,8 +81,8 @@ if __name__ == "__main__":
     net = 'IU'
     station = "*"
 # Here is our start and end time
-    stime = UTCDateTime('2016-001T00:00:00.0')
-    etime = UTCDateTime('2016-031T00:00:00.0')
+    stime = UTCDateTime('2017-001T00:00:00.0')
+    etime = UTCDateTime('2017-031T00:00:00.0')
     ctime = stime
 
     sp = Parser('/APPS/metadata/SEED/' + net + '.dataless')
@@ -193,7 +193,7 @@ if __name__ == "__main__":
                         ctime += 24.*60.*60.
                         continue
 
-                    
+
         #rotdata is an object that stores the data and has
         #the rotation method.
                     rotdata=Rotation(stref,sttest)
@@ -228,10 +228,10 @@ if __name__ == "__main__":
                                 'NS theta, NS residual, EW theta, EW residual, metadata Ref LH1,' \
                                  'metadata Ref LH2, metadata Test LH1, metadata Test LH2\n')
                     # get metadata orientation values
-                    Ref1 =getorientation(stref[0], sp)
-                    Ref2 =getorientation(stref[1], sp)
-                    Test1 = getorientation(sttest[0],sp)
-                    Test2 = getorientation(sttest[1], sp)
+                    Ref1[nd] = getorientation(stref[0], sp)
+                    Ref2[nd] = getorientation(stref[1], sp)
+                    Test1[nd] = getorientation(sttest[0],sp)
+                    Test2[nd] = getorientation(sttest[1], sp)
                     # We have some results so lets also include metadata
                     
                     f.write(refloc +', '+ loc +', '+ day +', ' +  \
@@ -239,10 +239,21 @@ if __name__ == "__main__":
                             str(resiNS) + ', ' + str(thetaEW) + ', ' + str(resiEW) + \
                             ', ' + str(Ref1) + ', ' + str(Ref2) + ', ' + str(Test1) + ', ' + str(Test2) +  '\n')
                 
-            # in the while ctime .lt. etime - need to increment this by a day.
+        # in the while ctime .lt. etime - need to increment this by a day.
             ctime += 24.*60.*60.
-        # done with that station, exit the while loop.
+        # keep track of the number of days we have...           
+            nd+=1
+    # calculate some statistics...
+        Ref1Ave = Ref1Total/nd
+        Ref2Ave = Ref2Total/nd
+        Test1Ave = Test1Total/nd
+        Test2Ave = Test2Total/nd
+        Ref1Std = np.std
+        f.write(
+    # done with that station, exit the while loop, reset ctime and numdays
+        nd = 0 
         ctime = stime
+    # calculate the standard deviation and average    
 
         # close the file when you exit the while loop
 
