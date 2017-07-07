@@ -224,10 +224,12 @@ if __name__ == "__main__":
                     resiNS = resultNS['fun'] 
                     resiEW = resultEW['fun'] 
                     #corrvalNS = rotdata.corrNS
-                    windowLen = stref[0].count()/2
-                    corrvalNS, b = xcorr(stref[0].data,sttest[0].data,windowLen)
-                    corrvalEW = rotdata.corrEW
-                    print(corrvalNS)
+                    #windowLen = stref[0].count()
+                    #shiftLen  = round(stref[0].count()/10)
+                    shiftLen = int(20) 
+                    corrvalNS, b = xcorr(stref[0].data,sttest[0].data,shiftLen)
+                    corrvalEW, b = xcorr(stref[1].data,sttest[1].data,shiftLen)
+                    print(corrvalNS, b)
 
                     print(corrvalEW)
                     if debug:
