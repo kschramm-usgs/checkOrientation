@@ -253,8 +253,8 @@ if __name__ == "__main__":
                     # write results to file.
                     if not os.path.isfile(fileName):
                         f=open(fileName, 'w')
-                        f.write('ReferenceLoc, TestLoc, day, year, comp,' \
-                                'NS theta, NS residual, NS corr, EW theta, EW residual, EW coor, \
+                        f.write('ReferenceLoc, TestLoc, day, year, comp, \
+                                NS theta, NS residual, NS corr, EW theta, EW residual, EW coor, \
                                 metadata Ref LH1, metadata Ref LH2, metadata Test LH1, metadata Test LH2\n')
                     # get metadata orientation values
                     Ref1 = getorientation(stref[0], sp)
@@ -276,10 +276,6 @@ if __name__ == "__main__":
         thetaEWAve=np.average(thetaEW)
         thetaNSstd=np.std(thetaNS)
         thetaEWstd=np.std(thetaEW)
-        print(thetaNSAve)
-        print(thetaNSstd)
-        print(thetaEWAve)
-        print(thetaEWstd)
 
         f.write('NS Ave: '+ str(thetaNSAve)  +', std '+ str(thetaNSstd) +', EW Ave: '+ str(thetaEWAve) +', std: '+ str(thetaEWstd) +'\n')
     # done with that station, exit the while loop, reset ctime and numdays
