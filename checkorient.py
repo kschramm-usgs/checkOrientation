@@ -10,8 +10,8 @@ from time import gmtime, strftime
 from scipy.optimize import root
 from obspy.io.xseed import Parser
 from obspy.signal.cross_correlation import xcorr
-debug = True
 debug = False 
+debug = True
 
 class Rotation:
     def __init__(self, stref, sttest):
@@ -89,10 +89,10 @@ def getorientation(tr, sp):
 # start of the main program
 if __name__ == "__main__":
     net = 'IU'
-    station = "ADK"
+    station = "M*"
 # Here is our start and end time
     stime = UTCDateTime('2016-001T00:00:00.0')
-    etime = UTCDateTime('2016-031T00:00:00.0')
+    etime = UTCDateTime('2016-005T00:00:00.0')
     ctime = stime
 
     sp = Parser('/APPS/metadata/SEED/' + net + '.dataless')
@@ -117,6 +117,7 @@ if __name__ == "__main__":
 # check the relative orientation
 
     for sta in stas:
+        print ("processing station: "+sta)
 # initialize arrays
         thetaNS = [] 
         thetaEW = [] 
@@ -141,7 +142,7 @@ if __name__ == "__main__":
                 print(st)
             # look for gaps or masked values:
             if (st.get_gaps()): 
-                print('Data has gaps')
+                #print('Data has gaps')
                 ctime += 24.*60.*60.
                 continue
             st.detrend('demean')
@@ -230,7 +231,7 @@ if __name__ == "__main__":
                     corrIndex,corrvalNS = xcorr(stref[0].data,sttest[0].data,shiftLen)
                     corrIndex,corrvalEW = xcorr(stref[1].data,sttest[1].data,shiftLen)
         # if there is a low correlation, don't use that data.  (one station might be noisy, or we ran a calibration)
-                    if (abs(corrvalNS) < 0.85) or (abs(corrvalEW) < 0.85):
+                    if (abs(corrvalNS) < 0.5) or (abs(corrvalEW) < 0.5):
                         ctime += 24.*60.*60.
                         continue
                         ctime += 24.*60.*60.
@@ -267,7 +268,8 @@ if __name__ == "__main__":
                     f.write(refloc +', '+ loc +', '+ day +', ' +  \
                             str(ctime.year) + ', ' + str(thetaNS[-1]) + ', ' + \
                             str(resiNS) + ', ' + str(corrvalNS) + ', ' + str(thetaEW[-1]) + ', ' + str(resiEW) + \
-                            ', ' + str(corrvalEW) + ', ' + str(Ref1) + ', ' + str(Ref2) + ', ' + str(Test1) + ', ' + str(Test2) +  '\n')
+                            ', ' + str(corrvalEW) + ', ' + str(Ref1) + ', ' + str(Ref2) + ', ' + str(Test1) + \
+                            ', ' + str(Test2) +  '\n')
                 
         # in the while ctime .lt. etime - need to increment this by a day.
             ctime += 24.*60.*60.
