@@ -227,11 +227,15 @@ if __name__ == "__main__":
                     #windowLen = stref[0].count()
                     #shiftLen  = round(stref[0].count()/10)
                     shiftLen = int(20) 
-                    corrvalNS, b = xcorr(stref[0].data,sttest[0].data,shiftLen)
-                    corrvalEW, b = xcorr(stref[1].data,sttest[1].data,shiftLen)
-                    print(corrvalNS, b)
-
-                    print(corrvalEW)
+                    corrIndex,corrvalNS = xcorr(stref[0].data,sttest[0].data,shiftLen)
+                    corrIndex,corrvalEW = xcorr(stref[1].data,sttest[1].data,shiftLen)
+        # if there is a low correlation, don't use that data.  (one station might be noisy, or we ran a calibration)
+                    if (abs(corrvalNS) < 0.85) or (abs(corrvalEW) < 0.85):
+                        ctime += 24.*60.*60.
+                        continue
+                        ctime += 24.*60.*60.
+                        continue
+                       
                     if debug:
                         print('resultNS: ',str(resultNS))
                         print('resultEW: ',str(resultEW))
