@@ -39,6 +39,7 @@ class Rotation:
         return resi
     
 # This function gets the correlation of the data
+    @staticmethod
     def corrNS(self):
         windowLen = self.stref[0].data.length()/2
         a,b = xcorr(self.stref[0].data,self.sttest[0].data,windowLen)
@@ -217,10 +218,14 @@ if __name__ == "__main__":
                     if abs(resultNS['x'][0]) > 360:
                         thetaNS[-1] = (thetaNS[-1] % 360)
                     thetaEW.append(resultEW['x'][0])
+                    if abs(resultEW['x'][0]) > 360:
+                        thetaEW[-1] = (thetaEW[-1] % 360)
         #This is the value of the residual function you are minimizing
                     resiNS = resultNS['fun'] 
                     resiEW = resultEW['fun'] 
-                    corrvalNS = rotdata.corrNS
+                    #corrvalNS = rotdata.corrNS
+                    windowLen = stref[0].count()/2
+                    corrvalNS, b = xcorr(stref[0].data,sttest[0].data,windowLen)
                     corrvalEW = rotdata.corrEW
                     print(corrvalNS)
 
