@@ -9,6 +9,7 @@ import numpy as np
 from time import gmtime, strftime
 from scipy.optimize import root
 from obspy.io.xseed import Parser
+from obspy.signal.cross_correlation import xcorr
 debug = True
 debug = False 
 
@@ -40,13 +41,13 @@ class Rotation:
 # This function gets the correlation of the data
     def corrNS(self, windowLen):
         windowLen = self.stref[0].data.length()/2
-        corValue = (self.stref[0].data,self.sttest[0].data,windowLen)
+        corValue,b = xcorr(self.stref[0].data,self.sttest[0].data,windowLen)
         return corValue
 
 # This function gets the correlation of the data
     def corrEW(self, windowLen):
         windowLen = self.stref[1].data.length()/2
-        corValue = (self.stref[1].data,self.sttest[1].data,windowLen)
+        corValue,b = xcorr(self.stref[1].data,self.sttest[1].data,windowLen)
         return corValue
         
 def getsncl(tr):
@@ -86,10 +87,10 @@ def getorientation(tr, sp):
 # start of the main program
 if __name__ == "__main__":
     net = 'IU'
-    station = "ANTO"
+    station = "ADK"
 # Here is our start and end time
     stime = UTCDateTime('2016-001T00:00:00.0')
-    etime = UTCDateTime('2016-366T00:00:00.0')
+    etime = UTCDateTime('2016-031T00:00:00.0')
     ctime = stime
 
     sp = Parser('/APPS/metadata/SEED/' + net + '.dataless')
@@ -241,8 +242,8 @@ if __name__ == "__main__":
                     if not os.path.isfile(fileName):
                         f=open(fileName, 'w')
                         f.write('ReferenceLoc, TestLoc, day, year, comp,' \
-                                'NS theta, NS residual, EW theta, EW residual, metadata Ref LH1,' \
-                                 'metadata Ref LH2, metadata Test LH1, metadata Test LH2\n')
+                                'NS theta, NS residual, NS corr, EW theta, EW residual, EW coor, \
+                                metadata Ref LH1, metadata Ref LH2, metadata Test LH1, metadata Test LH2\n')
                     # get metadata orientation values
                     Ref1 = getorientation(stref[0], sp)
                     Ref2 = getorientation(stref[1], sp)
@@ -253,8 +254,8 @@ if __name__ == "__main__":
                     # the index [-1] will print the last value in the list
                     f.write(refloc +', '+ loc +', '+ day +', ' +  \
                             str(ctime.year) + ', ' + str(thetaNS[-1]) + ', ' + \
-                            str(resiNS) + ', ' + str(thetaEW[-1]) + ', ' + str(resiEW) + \
-                            ', ' + str(Ref1) + ', ' + str(Ref2) + ', ' + str(Test1) + ', ' + str(Test2) +  '\n')
+                            str(resiNS) + ', ' + str(corrvalNS) + ', ' + str(thetaEW[-1]) + ', ' + str(resiEW) + \
+                            ', ' + str(corrvalEW) + ', ' + str(Ref1) + ', ' + str(Ref2) + ', ' + str(Test1) + ', ' + str(Test2) +  '\n')
                 
         # in the while ctime .lt. etime - need to increment this by a day.
             ctime += 24.*60.*60.
