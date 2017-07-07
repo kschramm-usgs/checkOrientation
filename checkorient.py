@@ -39,13 +39,13 @@ class Rotation:
         return resi
     
 # This function gets the correlation of the data
-    def corrNS(self, windowLen):
+    def corrNS(self):
         windowLen = self.stref[0].data.length()/2
         corValue,b = xcorr(self.stref[0].data,self.sttest[0].data,windowLen)
         return corValue
 
 # This function gets the correlation of the data
-    def corrEW(self, windowLen):
+    def corrEW(self):
         windowLen = self.stref[1].data.length()/2
         corValue,b = xcorr(self.stref[1].data,self.sttest[1].data,windowLen)
         return corValue
