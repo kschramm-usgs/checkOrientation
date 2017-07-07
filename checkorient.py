@@ -10,8 +10,8 @@ from time import gmtime, strftime
 from scipy.optimize import root
 from obspy.io.xseed import Parser
 from obspy.signal.cross_correlation import xcorr
-debug = False 
 debug = True
+debug = False 
 
 class Rotation:
     def __init__(self, stref, sttest):
@@ -89,10 +89,10 @@ def getorientation(tr, sp):
 # start of the main program
 if __name__ == "__main__":
     net = 'IU'
-    station = "M*"
+    station = "*"
 # Here is our start and end time
     stime = UTCDateTime('2016-001T00:00:00.0')
-    etime = UTCDateTime('2016-005T00:00:00.0')
+    etime = UTCDateTime('2016-031T00:00:00.0')
     ctime = stime
 
     sp = Parser('/APPS/metadata/SEED/' + net + '.dataless')
@@ -118,6 +118,8 @@ if __name__ == "__main__":
 
     for sta in stas:
         print ("processing station: "+sta)
+# we seem to have passed all the tests, so see if there is a file that needs opening
+        fileName='Results_' + sta
 # initialize arrays
         thetaNS = [] 
         thetaEW = [] 
@@ -244,8 +246,6 @@ if __name__ == "__main__":
                         print('Here is the residual EW: ' + str(resiNS))
                         print('Here is theta EW: ' + str(thetaEW))
                         print('Here is the residual EW: ' + str(resiEW))
-                    # we seem to have passed all the tests, so see if there is a file that needs opening
-                    fileName='Results_' + sta
                     # The previous logic is based on the existence not if python has a copy
                     if debug:
                         print('opening file '+fileName)
@@ -257,6 +257,7 @@ if __name__ == "__main__":
                         f.write('ReferenceLoc, TestLoc, day, year, comp, \
                                 NS theta, NS residual, NS corr, EW theta, EW residual, EW coor, \
                                 metadata Ref LH1, metadata Ref LH2, metadata Test LH1, metadata Test LH2\n')
+                        f.close()
                     # get metadata orientation values
                     Ref1 = getorientation(stref[0], sp)
                     Ref2 = getorientation(stref[1], sp)
@@ -265,21 +266,27 @@ if __name__ == "__main__":
 
                     # Write some results and include metadata
                     # the index [-1] will print the last value in the list
+                    f=open(fileName, 'a')
                     f.write(refloc +', '+ loc +', '+ day +', ' +  \
                             str(ctime.year) + ', ' + str(thetaNS[-1]) + ', ' + \
                             str(resiNS) + ', ' + str(corrvalNS) + ', ' + str(thetaEW[-1]) + ', ' + str(resiEW) + \
                             ', ' + str(corrvalEW) + ', ' + str(Ref1) + ', ' + str(Ref2) + ', ' + str(Test1) + \
                             ', ' + str(Test2) +  '\n')
+                    f.close()
                 
         # in the while ctime .lt. etime - need to increment this by a day.
             ctime += 24.*60.*60.
     # calculate some statistics...
-        thetaNSAve=np.average(thetaNS)
-        thetaEWAve=np.average(thetaEW)
-        thetaNSstd=np.std(thetaNS)
-        thetaEWstd=np.std(thetaEW)
+        print(len(thetaNS))
 
-        f.write('NS Ave: '+ str(thetaNSAve)  +', std '+ str(thetaNSstd) +', EW Ave: '+ str(thetaEWAve) +', std: '+ str(thetaEWstd) +'\n')
+        if os.path.isfile(fileName):
+            thetaNSAve=np.average(thetaNS)
+            thetaEWAve=np.average(thetaEW)
+            thetaNSstd=np.std(thetaNS)
+            thetaEWstd=np.std(thetaEW)
+            f=open(fileName, 'a')
+            f.write('NS Ave: '+ str(thetaNSAve)  +', std '+ str(thetaNSstd) +', EW Ave: '+ str(thetaEWAve) +', std: '+ str(thetaEWstd) +'\n')
+            f.close()
     # done with that station, exit the while loop, reset ctime and numdays
         ctime = stime
     # calculate the standard deviation and average    
