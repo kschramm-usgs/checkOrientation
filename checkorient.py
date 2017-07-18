@@ -4,7 +4,6 @@ from obspy.core import read, UTCDateTime
 import os
 import glob
 import sys
-import math
 import numpy as np
 from time import gmtime, strftime
 from scipy.optimize import root
@@ -31,9 +30,9 @@ class Rotation:
 # This function is used to rotate the data
     def rotEW(self,theta):
         theta = theta % 360.
-        cosd=np.cos(-np.deg2rad(theta)- math.pi/2.)
-        sind=np.sin(-np.deg2rad(theta)- math.pi/2.)
-        data2 = sind*self.sttest[1].data - cosd*self.sttest[1].data
+        cosd=np.cos(-np.deg2rad(theta)- np.pi/2.)
+        sind=np.sin(-np.deg2rad(theta)- np.pi/2.)
+        data2 = sind*self.sttest[1].data - cosd*self.sttest[0].data
         resi = (abs(sum(data2*self.stref[1].data)/
                 np.sqrt(sum(data2**2)*sum(self.stref[1].data**2)) -1.))
         return resi
