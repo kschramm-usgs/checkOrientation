@@ -32,7 +32,13 @@ class Rotation:
         theta = theta % 360.
         cosd=np.cos(-np.deg2rad(theta)- np.pi/2.)
         sind=np.sin(-np.deg2rad(theta)- np.pi/2.)
-        data2 = sind*self.sttest[1].data - cosd*self.sttest[0].data
+        # trying the next method.  if this doesn't work then I will have to think
+        # harder about what adam is doing...
+        data2 = sind*self.sttest[0].data - cosd*self.sttest[1].data
+        # tried it this way - still coming out with the wrong angle...
+        # data2 = sind*self.sttest[1].data - cosd*self.sttest[0].data
+        # this was the original - not sure why both had 1 and the n/s uses 0 and 1
+        # data2 = sind*self.sttest[1].data - cosd*self.sttest[1].data
         resi = (abs(sum(data2*self.stref[1].data)/
                 np.sqrt(sum(data2**2)*sum(self.stref[1].data**2)) -1.))
         return resi
