@@ -57,6 +57,7 @@ class Rotation:
         corValue,b = xcorr(self.stref[1].data,self.sttest[1].data,windowLen)
         return corValue
         
+# this is stuff Adam Ringler added
 def getsncl(tr):
     """ Return the sncl """
     nslc = (tr.id).split('.')
@@ -94,10 +95,10 @@ def getorientation(tr, sp):
 # start of the main program
 if __name__ == "__main__":
     net = 'IU'
-    station = "*"
+    station = "ADK"
 # Here is our start and end time
     stime = UTCDateTime('2016-001T00:00:00.0')
-    etime = UTCDateTime('2016-031T00:00:00.0')
+    etime = UTCDateTime('2016-366T00:00:00.0')
     ctime = stime
 
     sp = Parser('/APPS/metadata/SEED/' + net + '.dataless')
@@ -259,9 +260,9 @@ if __name__ == "__main__":
                     # write results to file.
                     if not os.path.isfile(fileName):
                         f=open(fileName, 'w')
-                        f.write('ReferenceLoc, TestLoc, day, year, comp, \
-                                NS theta, NS residual, NS corr, EW theta, EW residual, EW coor, \
-                                metadata Ref LH1, metadata Ref LH2, metadata Test LH1, metadata Test LH2\n')
+                        f.write('ReferenceLoc, TestLoc, day, year, comp,\
+                                NS theta, NS residual, NS corr, EW theta,\
+                                EW residual, EW coor \n')
                         f.close()
                     # get metadata orientation values
                     Ref1 = getorientation(stref[0], sp)
@@ -274,9 +275,9 @@ if __name__ == "__main__":
                     f=open(fileName, 'a')
                     f.write(refloc +', '+ loc +', '+ day +', ' +  \
                             str(ctime.year) + ', ' + str(thetaNS[-1]) + ', ' + \
-                            str(resiNS) + ', ' + str(corrvalNS) + ', ' + str(thetaEW[-1]) + ', ' + str(resiEW) + \
-                            ', ' + str(corrvalEW) + ', ' + str(Ref1) + ', ' + str(Ref2) + ', ' + str(Test1) + \
-                            ', ' + str(Test2) +  '\n')
+                            str(resiNS) + ', ' + str(corrvalNS) + ', ' + \
+                            str(thetaEW[-1]) + ', ' + str(resiEW) + \
+                            ', ' + str(corrvalEW) + '\n')
                     f.close()
                 
         # in the while ctime .lt. etime - need to increment this by a day.
@@ -291,6 +292,8 @@ if __name__ == "__main__":
             thetaEWstd=np.std(thetaEW)
             f=open(fileName, 'a')
             f.write('NS Ave: '+ str(thetaNSAve)  +', std '+ str(thetaNSstd) +', EW Ave: '+ str(thetaEWAve) +', std: '+ str(thetaEWstd) +'\n')
+            f.write('Metadata information: Ref theta, ' + str(Ref1) + ', ' + str(Ref2) \
+                    + 'Test theta, ' + str(Test1) + ', ' + str(Test2) +  '\n')
             f.close()
     # done with that station, exit the while loop, reset ctime and numdays
         ctime = stime
