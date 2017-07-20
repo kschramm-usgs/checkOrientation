@@ -9,7 +9,7 @@ from obspy import UTCDateTime
 
 #first read in the data
 path = os.getcwd()
-file = "Results_IU_ADK"
+file = "testResults_IU_ADK"
 thetaNS=[]
 thetaNSrad=[]
 thetaEW=[]
@@ -34,7 +34,8 @@ with open(file,'r') as f:
         thetaEWrad.append(np.deg2rad(float(lv[7])))
         thetaEWresid.append(lv[8])
         thetaEWcorr.append(lv[9])
-    summary=lines[-1].split(',')
+    summary=lines[-3].split(',')
+    print(summary)
     metadata=lines[-1].split(',')
 
 # now create a nice plot. 
@@ -42,8 +43,14 @@ with open(file,'r') as f:
     ax = plt.subplot(111, projection='polar')
     ax.set_theta_zero_location("N")
     ax.set_theta_direction(-1)
-    plt.plot(thetaNSrad,thetaNScorr,'bo')
-    plt.plot(thetaEWrad,thetaEWcorr,'go')
+    NSorient=float(summary[1][1:-1])
+    EWorient=float(summary[5][1:-1])
+    print(NSorient, EWorient)
+    label1="NS orientation = %.2f" % (NSorient)
+    label2="EW orientation = %.2f" % (EWorient)
+    plt.plot(thetaNSrad,thetaNScorr,'bo', label=label1)
+    plt.plot(thetaEWrad,thetaEWcorr,'go', label=label2)
+    plt.legend(bbox_to_anchor=(0.8, 0.85, 1., 0.102),loc=3,borderaxespad=0.)
     plt.show()
 ## get the information for the lines
 #        calcR = [1., 1.]

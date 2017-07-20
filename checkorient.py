@@ -95,7 +95,7 @@ def getorientation(tr, sp):
 # start of the main program
 if __name__ == "__main__":
     net = 'IU'
-    station = "ADK"
+    station = "*"
 # Here is our start and end time
     stime = UTCDateTime('2016-001T00:00:00.0')
     etime = UTCDateTime('2016-366T00:00:00.0')
@@ -291,9 +291,9 @@ if __name__ == "__main__":
             thetaNSstd=np.std(thetaNS)
             thetaEWstd=np.std(thetaEW)
             f=open(fileName, 'a')
-            f.write('NS Ave: '+ str(thetaNSAve)  +', std '+ str(thetaNSstd) +', EW Ave: '+ str(thetaEWAve) +', std: '+ str(thetaEWstd) +'\n')
+            f.write('NS Ave, '+ str(thetaNSAve)  +', std, '+ str(thetaNSstd) +', EW Ave, '+ str(thetaEWAve) +', std, '+ str(thetaEWstd) +'\n')
             f.write('Metadata information: Ref theta, ' + str(Ref1) + ', ' + str(Ref2) \
-                    + 'Test theta, ' + str(Test1) + ', ' + str(Test2) +  '\n')
+                    + ', Test theta, ' + str(Test1) + ', ' + str(Test2) +  '\n')
             f.close()
     # done with that station, exit the while loop, reset ctime and numdays
         ctime = stime
