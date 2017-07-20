@@ -10,6 +10,7 @@ from obspy import UTCDateTime
 #first read in the data
 path = os.getcwd()
 file = "testResults_IU_ADK"
+station="ADK"
 thetaNS=[]
 thetaNSrad=[]
 thetaEW=[]
@@ -36,7 +37,8 @@ with open(file,'r') as f:
         thetaEWcorr.append(lv[9])
     summary=lines[-3].split(',')
     print(summary)
-    metadata=lines[-1].split(',')
+    metadata=lines[-2].split(',')
+    print(metadata)
 
 # now create a nice plot. 
     plt.figure()
@@ -44,13 +46,20 @@ with open(file,'r') as f:
     ax.set_theta_zero_location("N")
     ax.set_theta_direction(-1)
     NSorient=float(summary[1][1:-1])
+    NSstr=str("%.2f" % NSorient)
     EWorient=float(summary[5][1:-1])
+    EWstr=str("%.2f" % EWorient)
     print(NSorient, EWorient)
-    label1="NS orientation = %.2f" % (NSorient)
-    label2="EW orientation = %.2f" % (EWorient)
+    label1="NS"
+    label2="EW"
     plt.plot(thetaNSrad,thetaNScorr,'bo', label=label1)
     plt.plot(thetaEWrad,thetaEWcorr,'go', label=label2)
-    plt.legend(bbox_to_anchor=(0.8, 0.85, 1., 0.102),loc=3,borderaxespad=0.)
+    plt.legend(bbox_to_anchor=(0.95, 0.85, 1.2, 0.102),loc=3,borderaxespad=0.)
+    plotString = str("NS metadata, calculated: " + str(metadata[4]) +\
+            ", " + NSstr + "\nEW metadata: " + str(metadata[5]) +\
+            ", " + EWstr)
+    plt.text(2*np.pi, 1.3,station,fontsize=14)
+    plt.text(3*np.pi/4, 1.5,plotString,fontsize=12)
     plt.show()
 ## get the information for the lines
 #        calcR = [1., 1.]

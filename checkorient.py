@@ -95,10 +95,12 @@ def getorientation(tr, sp):
 # start of the main program
 if __name__ == "__main__":
     net = 'IU'
-    station = "*"
-# Here is our start and end time
-    stime = UTCDateTime('2016-001T00:00:00.0')
-    etime = UTCDateTime('2016-366T00:00:00.0')
+    station  = "*"
+    #station  = "RSSD"
+    #            "RSSD","SLBS","ULN","WCI"]
+    # Here is our start and end time
+    stime = UTCDateTime('2015-001T00:00:00.0')
+    etime = UTCDateTime('2015-366T00:00:00.0')
     ctime = stime
 
     sp = Parser('/APPS/metadata/SEED/' + net + '.dataless')
