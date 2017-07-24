@@ -41,10 +41,13 @@ with open(file,'r') as f:
     print(metadata)
 
 # now create a nice plot. 
-    plt.figure()
+    plt.figure(figsize=(11,8.5))
     ax = plt.subplot(111, projection='polar')
     ax.set_theta_zero_location("N")
     ax.set_theta_direction(-1)
+    #ax.set_ylabel=('Correlation')
+    plt.set_ylabel=('Correlation')
+    ax.set_title(station+'                 ')
     NSorient=float(summary[1][1:-1])
     NSstr=str("%.2f" % NSorient)
     EWorient=float(summary[5][1:-1])
@@ -52,34 +55,17 @@ with open(file,'r') as f:
     print(NSorient, EWorient)
     label1="NS"
     label2="EW"
-    plt.plot(thetaNSrad,thetaNScorr,'bo', label=label1)
-    plt.plot(thetaEWrad,thetaEWcorr,'go', label=label2)
+    #print(isinstance(metadata[4],str))
+    #metadataRad=np.deg2rad(metadata[4])
+    plt.ylim([0, 1.2])
+    plt.arrow(np.deg2rad(float(metadata[4])),0, 0,1.09,fc='b', ec='b',head_width=0.05, head_length = 0.1, alpha=0.8)
+    plt.plot(thetaNSrad,thetaNScorr,'bo', label=label1, alpha =0.35)
+    plt.arrow(np.deg2rad(float(metadata[5])),0, 0,1.09,fc='g', ec='g',head_width=0.05, head_length = 0.1, alpha=0.8)
+    plt.plot(thetaEWrad,thetaEWcorr,'go', label=label2, alpha=0.35)
+    print(np.deg2rad(float(metadata[5])))
     plt.legend(bbox_to_anchor=(0.95, 0.85, 1.2, 0.102),loc=3,borderaxespad=0.)
     plotString = str("NS metadata, calculated: " + str(metadata[4]) +\
-            ", " + NSstr + "\nEW metadata: " + str(metadata[5]) +\
+            ", " + NSstr + "\nEW metadata, calculated: " + str(metadata[5]) +\
             ", " + EWstr)
-    plt.text(2*np.pi, 1.3,station,fontsize=14)
-    plt.text(3*np.pi/4, 1.5,plotString,fontsize=12)
+    plt.text(5*np.pi/6,1.4,plotString,fontsize=12)
     plt.show()
-## get the information for the lines
-#        calcR = [1., 1.]
-#        label1="Baz_calc = %.2f" % (ang)
-#        label2="Baz2_calc = %.2f" % (ang2)
-#        label3="Baz_meas = %.2f" % (StationAziExpec[2])
-## actually plot the things
-#        plt.plot(thetaNS,calcR,'blue',label=label1)
-#        plt.plot(thetaEW,calcR,'cyan',label=label2)
-#        plt.plot(expcTheta,calcR,'black',label=label3)
-#        #plt.plot(theta,r,'red',label='Particle Motion')
-#        #plt.text(32*np.pi/20,2.7,(printstr+'\n'+
-#        #         printstr1+'\n'+printstr2))
-#        #fileName =(os.getcwd() +'/'+ resDir +'/Azimuth_'+
-#        #        station[0] +'_'+ station[1] +'_'+
-#        #        str(eventTime) + '.png')
-#        fileName='ADKtestPlot'
-#        print fileName
-#
-#        plt.legend(bbox_to_anchor=(0.8, 0.85, 1., 0.102),loc=3,borderaxespad=0.)
-#        plt.savefig(fileName,format='png')
-#        plt.show()
-#        plt.close()
