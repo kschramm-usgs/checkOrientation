@@ -27,7 +27,7 @@ class Rotation:
     def rotNS(self,theta):
         theta = theta % 360.
         thetaRad=np.deg2rad(theta)
-        print(theta, thetaRad)
+        #print(theta, thetaRad)
         cosd=np.cos(np.deg2rad(-theta))
         sind=np.sin(np.deg2rad(-theta))
         data1 = cosd*self.sttest[0].data + sind*self.sttest[1].data
@@ -106,7 +106,7 @@ def getorientation(tr, sp):
 # start of the main program
 if __name__ == "__main__":
     net = 'IU'
-    station  = "ANMO"
+    station  = "*"
     # Here is our start and end time
     stime = UTCDateTime('2016-001T00:00:00.0')
     etime = UTCDateTime('2016-366T00:00:00.0')
