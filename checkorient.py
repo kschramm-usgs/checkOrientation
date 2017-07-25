@@ -26,6 +26,8 @@ class Rotation:
 # This function is used to rotate the data
     def rotNS(self,theta):
         theta = theta % 360.
+        thetaRad=np.deg2rad(theta)
+        print(theta, thetaRad)
         cosd=np.cos(np.deg2rad(-theta))
         sind=np.sin(np.deg2rad(-theta))
         data1 = cosd*self.sttest[0].data + sind*self.sttest[1].data
@@ -104,7 +106,7 @@ def getorientation(tr, sp):
 # start of the main program
 if __name__ == "__main__":
     net = 'IU'
-    station  = "COR"
+    station  = "ANMO"
     # Here is our start and end time
     stime = UTCDateTime('2016-001T00:00:00.0')
     etime = UTCDateTime('2016-366T00:00:00.0')
@@ -240,6 +242,13 @@ if __name__ == "__main__":
                         continue
 
 
+        # get metadata orientation values
+                    Ref1 = getorientation(stref[0], sp)
+                    Ref2 = getorientation(stref[1], sp)
+                    Test1 = getorientation(sttest[0],sp)
+                    Test2 = getorientation(sttest[1], sp)
+                    if (Test1 == None or Test2 == None):
+                        print("Cannot find azimuth for test data.") 
         #rotdata is an object that stores the data and has
         #the rotation method.
                     rotdata=Rotation(stref,sttest)
@@ -248,12 +257,21 @@ if __name__ == "__main__":
                     resultNS = root(rotdata.rotNS, 0., method = 'lm')
                     resultEW = root(rotdata.rotEW, 0., method = 'lm')
         #grab the results from the minimization problem
-                    thetaNS.append(resultNS['x'][0])
+        #and check to make sure we are between 0 and 360
+                    thetaNS.append(resultNS['x'][0]+Ref1)
                     if abs(resultNS['x'][0]) > 360:
+
                         thetaNS[-1] = (thetaNS[-1] % 360)
-                    thetaEW.append(resultEW['x'][0])
+                    elif resultNS['x'][0] < 0:
+                        thetaNS[-1] = 360 + thetaNS[-1]
+
+                    thetaEW.append(resultEW['x'][0]+Ref1)
                     if abs(resultEW['x'][0]) > 360:
                         thetaEW[-1] = (thetaEW[-1] % 360)
+                    elif resultEW['x'][0] < 0:
+                        thetaEW[-1] = 360 + thetaEW[-1]
+
+
         #This is the value of the residual function you are minimizing
                     resiNS = resultNS['fun'] 
                     resiEW = resultEW['fun'] 
@@ -280,22 +298,21 @@ if __name__ == "__main__":
                     # The previous logic is based on the existence not if python has a copy
                     if debug:
                         print('opening file '+fileName)
+
+
                     # this if not in globals doesn't seem to work. going back to the other test.
                     #if 'f' not in globals():
                     # write results to file.
                     if not os.path.isfile(fileName):
+                        print('writing header info')
                         f=open(fileName, 'w')
-                        f.write('ReferenceLoc, TestLoc, day, year, comp,\
-                                NS theta, NS residual, NS corr, EW theta,\
-                                EW residual, EW coor \n')
+                        f.write('Metadata information for ' + sta + \
+                                ': Ref theta, ' +  str(Ref1) + ', ' + str(Ref2) + \
+                                ', Test theta, ' + str(Test1) +  ', ' + str(Test2) +  '\n')
+                        f.write('ReferenceLoc, TestLoc, day, year, comp,'\
+                                +'NS theta, NS residual, NS corr, EW theta,'\
+                                +'EW residual, EW coor \n')
                         f.close()
-                    # get metadata orientation values
-                    Ref1 = getorientation(stref[0], sp)
-                    Ref2 = getorientation(stref[1], sp)
-                    Test1 = getorientation(sttest[0],sp)
-                    Test2 = getorientation(sttest[1], sp)
-                    if (Test1 == None or Test2 == None):
-                        print("Cannot find azimuth for test data.") 
 
                     # Write some results and include metadata
                     # the index [-1] will print the last value in the list
@@ -310,20 +327,19 @@ if __name__ == "__main__":
         # in the while ctime .lt. etime - need to increment this by a day.
             ctime += 24.*60.*60.
     # calculate some statistics...
-        print(len(thetaNS))
-
-        if os.path.isfile(fileName):
-            thetaNSAve=np.average(thetaNS)
-            thetaEWAve=np.average(thetaEW)
-            thetaNSstd=np.std(thetaNS)
-            thetaEWstd=np.std(thetaEW)
-            f=open(fileName, 'a')
-            f.write('NS Ave, '+ str(thetaNSAve)  +', std, '+ str(thetaNSstd) \
-                    +', EW Ave, '+ str(thetaEWAve) +', std, '+ str(thetaEWstd) \
-                    +', number of days,  ' + str(len(thetaNS)) + '\n')
-            f.write('Metadata information: Ref theta, ' + str(Ref1) + ', ' + str(Ref2) \
-                    + ', Test theta, ' + str(Test1) + ', ' + str(Test2) +  '\n')
-            f.close()
+    # moving this to the plotting routine...
+        #if os.path.isfile(fileName):
+        #    thetaNSAve=np.average(thetaNS)
+        #    thetaEWAve=np.average(thetaEW)
+        #    thetaNSstd=np.std(thetaNS)
+        #    thetaEWstd=np.std(thetaEW)
+        #    f=open(fileName, 'a')
+        #    f.write('NS Ave, '+ str(thetaNSAve)  +', std, '+ str(thetaNSstd) \
+        #            +', EW Ave, '+ str(thetaEWAve) +', std, '+ str(thetaEWstd) \
+        #            +', number of days,  ' + str(len(thetaNS)) + '\n')
+        #    f.write('Metadata information: Ref theta, ' + str(Ref1) + ', ' + str(Ref2) \
+        #            + ', Test theta, ' + str(Test1) + ', ' + str(Test2) +  '\n')
+        #    f.close()
     # done with that station, exit the while loop, reset ctime and numdays
         ctime = stime
     # calculate the standard deviation and average    

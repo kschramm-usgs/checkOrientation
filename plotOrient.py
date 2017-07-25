@@ -9,8 +9,11 @@ from obspy import UTCDateTime
 
 #first read in the data
 path = os.getcwd()
-file = "testResults_IU_ADK"
-station="ADK"
+network="IU"
+station="ANMO"
+refChan="00"
+testChan="10"
+file = "Results_" + network +"_"+ station +"_"+ refChan +"_"+ testChan
 thetaNS=[]
 thetaNSrad=[]
 thetaEW=[]
@@ -20,11 +23,14 @@ thetaEWresid=[]
 thetaNScorr=[]
 thetaEWcorr=[]
 with open(file,'r') as f:
-    data=f.readline()
+    #data=f.readline()
     mydat=f.read()
     lines=mydat.split('\n')
-    header=lines[0].split(',')
-    for ln in lines[1:-3]:
+    metadata=lines[0].split(',')
+    print(metadata)
+    header=lines[1].split(',')
+    print(header)
+    for ln in lines[2:-1]:
         lv=ln.split(',')
 # break up data into arrays
         thetaNS.append(float(lv[4]))
@@ -35,10 +41,16 @@ with open(file,'r') as f:
         thetaEWrad.append(np.deg2rad(float(lv[7])))
         thetaEWresid.append(lv[8])
         thetaEWcorr.append(lv[9])
-    summary=lines[-3].split(',')
-    print(summary)
-    metadata=lines[-2].split(',')
-    print(metadata)
+    # moving this to the plotting routine...
+    numdays = len(thetaNS)
+    NSorient=np.average(thetaNS)
+    EWorient=np.average(thetaEW)
+    NSstr=str("%.2f" % NSorient)
+    EWstr=str("%.2f" % EWorient)
+    thetaNSstd=np.std(thetaNS)
+    thetaEWstd=np.std(thetaEW)
+    NSstdstr=str("%.2f" % thetaNSstd)
+    EWstdstr=str("%.2f" % thetaEWstd)
 
 # now create a nice plot. 
     plt.figure(figsize=(11,8.5))
@@ -47,25 +59,22 @@ with open(file,'r') as f:
     ax.set_theta_direction(-1)
     #ax.set_ylabel=('Correlation')
     plt.set_ylabel=('Correlation')
-    ax.set_title(station+'                 ')
-    NSorient=float(summary[1][1:-1])
-    NSstr=str("%.2f" % NSorient)
-    EWorient=float(summary[5][1:-1])
-    EWstr=str("%.2f" % EWorient)
+    ax.set_title(station+' ,Ref Chan: '+ refChan + ' ,Test Chan: '+ testChan + '                 ')
     print(NSorient, EWorient)
     label1="NS"
     label2="EW"
     #print(isinstance(metadata[4],str))
     #metadataRad=np.deg2rad(metadata[4])
     plt.ylim([0, 1.2])
+    print(metadata[4])
     plt.arrow(np.deg2rad(float(metadata[4])),0, 0,1.09,fc='b', ec='b',head_width=0.05, head_length = 0.1, alpha=0.8)
     plt.plot(thetaNSrad,thetaNScorr,'bo', label=label1, alpha =0.35)
     plt.arrow(np.deg2rad(float(metadata[5])),0, 0,1.09,fc='g', ec='g',head_width=0.05, head_length = 0.1, alpha=0.8)
     plt.plot(thetaEWrad,thetaEWcorr,'go', label=label2, alpha=0.35)
     print(np.deg2rad(float(metadata[5])))
     plt.legend(bbox_to_anchor=(0.95, 0.85, 1.2, 0.102),loc=3,borderaxespad=0.)
-    plotString = str("NS metadata, calculated: " + str(metadata[4]) +\
-            ", " + NSstr + "\nEW metadata, calculated: " + str(metadata[5]) +\
-            ", " + EWstr)
-    plt.text(5*np.pi/6,1.4,plotString,fontsize=12)
+    plotString = str("NS metadata, calculated (std): " + str(metadata[4]) +\
+            ", " + NSstr +"(" + NSstdstr + ")\nEW metadata, calculated (std): " + str(metadata[5]) +\
+            ", " + EWstr +"(" + EWstdstr + ")\n" + str(numdays) + " days in calculation")
+    plt.text(19*np.pi/20,1.4,plotString,fontsize=12)
     plt.show()
