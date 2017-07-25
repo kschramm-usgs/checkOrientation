@@ -97,15 +97,17 @@ def getorientation(tr, sp):
                         azimuth = blkt.azimuth
     return azimuth
 
+# def
+
 
 ########################################################################
 # start of the main program
 if __name__ == "__main__":
     net = 'IU'
-    station  = "KMBO"
+    station  = "COR"
     # Here is our start and end time
-    stime = UTCDateTime('2015-001T00:00:00.0')
-    etime = UTCDateTime('2015-365T00:00:00.0')
+    stime = UTCDateTime('2016-001T00:00:00.0')
+    etime = UTCDateTime('2016-366T00:00:00.0')
     ctime = stime
 
     sp = Parser('/APPS/metadata/SEED/' + net + '.dataless')
@@ -131,8 +133,6 @@ if __name__ == "__main__":
 
     for sta in stas:
         print ("processing station: "+sta)
-# we seem to have passed all the tests, so see if there is a file that needs opening
-        fileName='Results_' + sta
 # initialize arrays
         thetaNS = [] 
         thetaEW = [] 
@@ -157,7 +157,8 @@ if __name__ == "__main__":
                 print(st)
             # look for gaps or masked values:
             if (st.get_gaps()): 
-                #print('Data has gaps')
+                if debug:
+                    print('Data has gaps')
                 ctime += 24.*60.*60.
                 continue
             st.detrend('demean')
@@ -165,7 +166,7 @@ if __name__ == "__main__":
             st.filter('bandpass',freqmin=1./8., freqmax=1./4.)
             st.taper(0.05)
         # okay time to process the relative orientation
-        # We need to grab the different locations
+        # We need to grab the different locations of the sensors
             locs = []
             for tr in st:
                 locs.append(str(tr.stats.location))
@@ -174,30 +175,37 @@ if __name__ == "__main__":
             if debug:
                 print(locs)
             # We now have all the location codes for the statio
+            # do we have 2 or three locs?  how do we handle the few stations with 
+            # more than 2 locs?
             if len(locs) >= 2:
-                print (len(locs))
-                print (locs)
-        # We have at least two sensors so compare the azimuth
-        # First one will be the reference
-        # pop will take the first one out and the list gets smaller
+                if (debug):
+                    print (len(locs))
+                    print (locs)
+       # We have at least two sensors so compare the azimuth
+       # First one will be the reference
+       # pop will take the first one out and the list gets smaller
                 refloc = locs.pop(0)
                 stref = st.select(location=refloc)
                 stref.sort(['channel'])
                 threeChannels(stref.count())
-        #make sure we have 3 component data 
+       #make sure we have 3 component data 
                 if (not threeChannels):
-                    #print('No 3 component data: '+ string)
+                    if debug:
+                        print('No 3 component data: '+ string)
                     #better increment....
                     ctime += 24.*60.*60.
                     continue
-        # now the test stream
+       # now loop over the sensors  
                 for loc in locs:
+# we seem to have passed a few tests, so let's create a file name
+                    fileName='Results_' + sta + '_' + refloc + '_' + loc 
                     sttest = st.select(location=loc)
                     sttest.sort(['channel'])
         # make sure we have 3 component data 
-                    #channelCheck method
-                    if (sttest.count() < 3) :
-                        #print('No 3 component data: '+ string)
+                    threeChannels(sttest.count())
+                    if (not threeChannels) :
+                        if debug:
+                            print('No 3 component data: '+ string)
                         #better increment....
                         ctime += 24.*60.*60.
                         continue
@@ -205,25 +213,29 @@ if __name__ == "__main__":
                         print(stref)
                         print(sttest)
                 # now make sure that we have the same number of samples
-                # This is clunky and probably needs to be changed
                     if (stref[0].count() != stref[1].count()):
-                        #print('samples not the same')
+                        if debug:
+                            print('samples not the same')
                         ctime += 24.*60.*60.
                         continue
                     elif (stref[0].count() != stref[2].count()):
-                        #print('samples not the same')
+                        if debug:
+                            print('samples not the same')
                         ctime += 24.*60.*60.
                         continue
                     elif stref[0].count() != sttest[0].count():
-                        #print('samples not the same')
+                        if debug:
+                            print('samples not the same')
                         ctime += 24.*60.*60.
                         continue
                     elif stref[0].count() != sttest[1].count():
-                        #print('samples not the same')
+                        if debug:
+                            print('samples not the same')
                         ctime += 24.*60.*60.
                         continue
                     elif stref[0].count() != sttest[2].count():
-                        #print('samples not the same')
+                        if debug:
+                            print('samples not the same')
                         ctime += 24.*60.*60.
                         continue
 
