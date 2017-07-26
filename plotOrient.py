@@ -38,7 +38,11 @@ for file in files:
         metadata=lines[0].split(',')
         print(metadata)
         header=lines[1].split(',')
-        print(header)
+        #print(header)
+        start=lines[2].split(',')
+        startDate=str(start[3])+'-'+str(start[2])
+        end=lines[-2].split(',')
+        endDate=str(end[3])+'-'+str(end[2])
         for ln in lines[2:-1]:
             lv=ln.split(',')
     # break up data into arrays
@@ -68,7 +72,8 @@ for file in files:
         ax.set_theta_direction(-1)
         #ax.set_ylabel=('Correlation')
         plt.set_ylabel=('Correlation')
-        ax.set_title(station+' ,Ref Chan: '+ refChan + ' ,Test Chan: '+ testChan + '                 ')
+        ax.set_title(station+' ,Ref Chan: '+ refChan + ' ,Test Chan: ' \
+                + testChan + ', for ' + startDate + ' to ' + endDate )
         print(NSorient, EWorient)
         label1="NS"
         label2="EW"

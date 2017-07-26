@@ -108,7 +108,7 @@ if __name__ == "__main__":
     net = 'IU'
     station  = "ANMO"
     # Here is our start and end time
-    stime = UTCDateTime('2016-340T00:00:00.0')
+    stime = UTCDateTime('2016-201T00:00:00.0')
     etime = UTCDateTime('2017-200T00:00:00.0')
     ctime = stime
 
@@ -165,7 +165,7 @@ if __name__ == "__main__":
                 continue
             st.detrend('demean')
             st.merge()
-            st.filter('bandpass',freqmin=1./8., freqmax=1./4.)
+            st.filter('bandpass',freqmin=1./8., freqmax=1./4., zerophase=True)
             st.taper(0.05)
         # okay time to process the relative orientation
         # We need to grab the different locations of the sensors
@@ -321,7 +321,8 @@ if __name__ == "__main__":
                             str(ctime.year) + ', ' + str(thetaNS[-1]) + ', ' + \
                             str(resiNS) + ', ' + str(corrvalNS) + ', ' + \
                             str(thetaEW[-1]) + ', ' + str(resiEW) + \
-                            ', ' + str(corrvalEW) + '\n')
+                            ', ' + str(corrvalEW) + ', ' + str(Ref1) + ', ' + \
+                            str(Test1) + '\n')
                     f.close()
                 
         # in the while ctime .lt. etime - need to increment this by a day.
