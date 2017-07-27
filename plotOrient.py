@@ -32,39 +32,41 @@ for file in files:
     thetaNScorr=[]
     thetaEWcorr=[]
     epochAngles=[]
-    epochAngles.append(metadata[4])
     with open(file,'r') as f:
         #data=f.readline()
         mydat=f.read()
         lines=mydat.split('\n')
         metadata=lines[0].split(',')
-        print(metadata)
+        epochAngles.append(metadata[4])
+        metaAngOld=epochAngles[0]
         header=lines[1].split(',')
         #print(header)
         start=lines[2].split(',')
-        startDate=str(start[3])+'-'+str(start[2])
+        startDate=str(start[3])+'-'+str(start[2]).strip() 
         end=lines[-2].split(',')
-        endDate=str(end[3])+'-'+str(end[2])
-        metaAngOld=metadata[4]
+        endDate=str(end[3])+'-'+str(end[2]).strip()
         epoch=1
         for ln in lines[2:-1]:
             lv=ln.split(',')
+            print(lv)
     # break up data into arrays
-            thetaNS.append(float(lv[4]))
-            thetaNSrad.append(np.deg2rad(float(lv[4])))
+            refAng = lv[10]
+            thetaNS.append(float(lv[4])+float(refAng))
+            thetaNSrad.append(np.deg2rad(float(lv[4])+float(refAng)))
             thetaNSresid.append(lv[5])
             thetaNScorr.append(lv[6])
-            thetaEW.append(float(lv[7]))
-            thetaEWrad.append(np.deg2rad(float(lv[7])))
+            thetaEW.append(float(lv[7])+float(refAng))
+            thetaEWrad.append(np.deg2rad(float(lv[7])+float(refAng)))
             thetaEWresid.append(lv[8])
             thetaEWcorr.append(lv[9])
-            metaAng = lv[10])
             # check for changes in epoch
-            if metaAng /= metaAngOld:
+            metaAng = lv[11]
+            if metaAng != metaAngOld:
                 print('You have another epoch')
                 epoch=epoch+1
                 epochAngles.append(metaAng)
-                 
+                metaAngOld=metaAng
+                newEpochDate=str(lv[3])+'-'+str(lv[2]).strip()
 
 
         # moving this to the plotting routine...
@@ -85,7 +87,7 @@ for file in files:
         ax.set_theta_direction(-1)
         #ax.set_ylabel=('Correlation')
         plt.set_ylabel=('Correlation')
-        ax.set_title(station+' ,Ref Chan: '+ refChan + ' ,Test Chan: ' \
+        ax.set_title(station+', Ref Chan: '+ refChan + ', Test Chan: ' \
                 + testChan + ', for ' + startDate + ' to ' + endDate )
         print(NSorient, EWorient)
         label1="NS"
@@ -95,17 +97,25 @@ for file in files:
         plt.ylim([0, 1.2])
 
         for ang in epochAngles:
+            print(ang)
             # need to change the metadata ot be ang.
-            plt.arrow(np.deg2rad(float(metadata[4])),0, 0,1.09,fc='b', ec='b',head_width=0.05, head_length = 0.1, alpha=0.8)
-            plt.arrow(np.deg2rad(float(metadata[5])),0, 0,1.09,fc='g', ec='g',head_width=0.05, head_length = 0.1, alpha=0.8)
+            plt.arrow(np.deg2rad(float(ang)),0, 0,1.09,fc='b', ec='b',head_width=0.05, head_length = 0.1, alpha=0.8)
+            plt.arrow(np.deg2rad(float(ang)+90),0, 0,1.09,fc='g', ec='g',head_width=0.05, head_length = 0.1, alpha=0.8)
 
         plt.plot(thetaNSrad,thetaNScorr,'bo', label=label1, alpha =0.35)
-        plt.plot(thetaNSrad,thetaNSresid,'bx', label=label1, alpha =0.35)
         plt.plot(thetaEWrad,thetaEWcorr,'go', label=label2, alpha=0.35)
         print(np.deg2rad(float(metadata[5])))
         plt.legend(bbox_to_anchor=(0.95, 0.85, 1.2, 0.102),loc=3,borderaxespad=0.)
-        plotString = str("NS metadata, calculated (std): " + str(metadata[4]) +\
+        if len(epochAngles) < 2:
+            plotString = str("NS metadata, calculated (std): " + str(metadata[4]) +\
                 ", " + NSstr +"(" + NSstdstr + ")\nEW metadata, calculated (std): " + str(metadata[5]) +\
                 ", " + EWstr +"(" + EWstdstr + ")\n" + str(numdays) + " days in calculation")
+        else:
+            plotString = str("NS metadata, calculated (std): " + str(metadata[4]) +\
+                ", " + NSstr +"(" + NSstdstr + ")\nEW metadata, calculated (std): " + str(metadata[5]) +\
+                ", " + EWstr +"(" + EWstdstr + ")\n" + str(numdays) + " days in calculation, "+ \
+                'new epoch starts ' + newEpochDate + '\n' + 'Epoch 1 NS angle:' + str(epochAngles[0]) +\
+                ' Epoch 2 NS angle: '+ str(epochAngles[1]))
+                 
         plt.text(19*np.pi/20,1.4,plotString,fontsize=12)
         plt.show()

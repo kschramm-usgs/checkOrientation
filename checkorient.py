@@ -153,8 +153,8 @@ if __name__ == "__main__":
     net = 'IU'
     station  = "ANMO"
     # Here is our start and end time
-    stime = UTCDateTime('2017-150T00:00:00.0')
-    etime = UTCDateTime('2017-200T00:00:00.0')
+    stime = UTCDateTime('2016-150T00:00:00.0')
+    etime = UTCDateTime('2016-366T00:00:00.0')
     ctime = stime
 
     sp = Parser('/APPS/metadata/SEED/' + net + '.dataless')
@@ -195,7 +195,8 @@ if __name__ == "__main__":
         # Just grab one hour we might want to change this
             try:
                 st = read(string, starttime=ctime, endtime=ctime+60.*60.*24.)
-                print(st)
+                if debug:
+                    print(st)
             except:
                 print('no data for '+ string)
                 #better increment....
@@ -309,13 +310,13 @@ if __name__ == "__main__":
                     resultEW = root(rotdata.rotEW, 0., method = 'lm')
         #grab the results from the minimization problem
         #and check to make sure we are between 0 and 360
-                    thetaNS.append(resultNS['x'][0]+Ref1)
+                    thetaNS.append(resultNS['x'][0])
                     if abs(resultNS['x'][0]) > 360:
                         thetaNS[-1] = (thetaNS[-1] % 360)
                     elif resultNS['x'][0] < 0:
                         thetaNS[-1] = 360 + thetaNS[-1]
 
-                    thetaEW.append(resultEW['x'][0]+Ref1)
+                    thetaEW.append(resultEW['x'][0])
                     if abs(resultEW['x'][0]) > 360:
                         thetaEW[-1] = (thetaEW[-1] % 360)
                     elif resultEW['x'][0] < 0:
