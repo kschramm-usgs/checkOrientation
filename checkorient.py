@@ -260,7 +260,6 @@ if __name__ == "__main__":
         #and check to make sure we are between 0 and 360
                     thetaNS.append(resultNS['x'][0]+Ref1)
                     if abs(resultNS['x'][0]) > 360:
-
                         thetaNS[-1] = (thetaNS[-1] % 360)
                     elif resultNS['x'][0] < 0:
                         thetaNS[-1] = 360 + thetaNS[-1]
@@ -275,9 +274,6 @@ if __name__ == "__main__":
         #This is the value of the residual function you are minimizing
                     resiNS = resultNS['fun'] 
                     resiEW = resultEW['fun'] 
-                    #corrvalNS = rotdata.corrNS
-                    #windowLen = stref[0].count()
-                    #shiftLen  = round(stref[0].count()/10)
                     shiftLen = int(20) 
                     corrIndex,corrvalNS = xcorr(stref[0].data,sttest[0].data,shiftLen)
                     corrIndex,corrvalEW = xcorr(stref[1].data,sttest[1].data,shiftLen)

@@ -31,6 +31,8 @@ for file in files:
     thetaEWresid=[]
     thetaNScorr=[]
     thetaEWcorr=[]
+    epochAngles=[]
+    epochAngles.append(metadata[4])
     with open(file,'r') as f:
         #data=f.readline()
         mydat=f.read()
@@ -43,6 +45,8 @@ for file in files:
         startDate=str(start[3])+'-'+str(start[2])
         end=lines[-2].split(',')
         endDate=str(end[3])+'-'+str(end[2])
+        metaAngOld=metadata[4]
+        epoch=1
         for ln in lines[2:-1]:
             lv=ln.split(',')
     # break up data into arrays
@@ -54,6 +58,15 @@ for file in files:
             thetaEWrad.append(np.deg2rad(float(lv[7])))
             thetaEWresid.append(lv[8])
             thetaEWcorr.append(lv[9])
+            metaAng = lv[10])
+            # check for changes in epoch
+            if metaAng /= metaAngOld:
+                print('You have another epoch')
+                epoch=epoch+1
+                epochAngles.append(metaAng)
+                 
+
+
         # moving this to the plotting routine...
         numdays = len(thetaNS)
         NSorient=np.average(thetaNS)
@@ -80,10 +93,14 @@ for file in files:
         #print(isinstance(metadata[4],str))
         #metadataRad=np.deg2rad(metadata[4])
         plt.ylim([0, 1.2])
-        print(metadata[4])
-        plt.arrow(np.deg2rad(float(metadata[4])),0, 0,1.09,fc='b', ec='b',head_width=0.05, head_length = 0.1, alpha=0.8)
+
+        for ang in epochAngles:
+            # need to change the metadata ot be ang.
+            plt.arrow(np.deg2rad(float(metadata[4])),0, 0,1.09,fc='b', ec='b',head_width=0.05, head_length = 0.1, alpha=0.8)
+            plt.arrow(np.deg2rad(float(metadata[5])),0, 0,1.09,fc='g', ec='g',head_width=0.05, head_length = 0.1, alpha=0.8)
+
         plt.plot(thetaNSrad,thetaNScorr,'bo', label=label1, alpha =0.35)
-        plt.arrow(np.deg2rad(float(metadata[5])),0, 0,1.09,fc='g', ec='g',head_width=0.05, head_length = 0.1, alpha=0.8)
+        plt.plot(thetaNSrad,thetaNSresid,'bx', label=label1, alpha =0.35)
         plt.plot(thetaEWrad,thetaEWcorr,'go', label=label2, alpha=0.35)
         print(np.deg2rad(float(metadata[5])))
         plt.legend(bbox_to_anchor=(0.95, 0.85, 1.2, 0.102),loc=3,borderaxespad=0.)
