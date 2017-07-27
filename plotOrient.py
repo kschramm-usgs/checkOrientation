@@ -7,87 +7,88 @@ import os
 import glob
 from obspy import UTCDateTime
 
-#first read in the data
-path = os.getcwd()
-for file in glob.glob("Result_*"):
-    f = open(file,'r') 
-    for line in f:
-        data = 
+#first read in the data - look for files starting with Results*
+#path = os.getcwd()
+#network="IU"
+#station="ANMO"
+#refChan="00"
+#testChan="10"
+#file = "Results_" + network +"_"+ station +"_"+ refChan +"_"+ testChan
+# get list of station files:
+files=glob.glob('Results_*')
+for file in files:
+    statInfo = file.split('_')
+    network=statInfo[1]
+    station=statInfo[2]
+    refChan=statInfo[3]
+    testChan=statInfo[4]
+    
+    thetaNS=[]
+    thetaNSrad=[]
+    thetaEW=[]
+    thetaEWrad=[]
+    thetaNSresid=[]
+    thetaEWresid=[]
+    thetaNScorr=[]
+    thetaEWcorr=[]
+    with open(file,'r') as f:
+        #data=f.readline()
+        mydat=f.read()
+        lines=mydat.split('\n')
+        metadata=lines[0].split(',')
+        print(metadata)
+        header=lines[1].split(',')
+        #print(header)
+        start=lines[2].split(',')
+        startDate=str(start[3])+'-'+str(start[2])
+        end=lines[-2].split(',')
+        endDate=str(end[3])+'-'+str(end[2])
+        for ln in lines[2:-1]:
+            lv=ln.split(',')
+    # break up data into arrays
+            thetaNS.append(float(lv[4]))
+            thetaNSrad.append(np.deg2rad(float(lv[4])))
+            thetaNSresid.append(lv[5])
+            thetaNScorr.append(lv[6])
+            thetaEW.append(float(lv[7]))
+            thetaEWrad.append(np.deg2rad(float(lv[7])))
+            thetaEWresid.append(lv[8])
+            thetaEWcorr.append(lv[9])
+        # moving this to the plotting routine...
+        numdays = len(thetaNS)
+        NSorient=np.average(thetaNS)
+        EWorient=np.average(thetaEW)
+        NSstr=str("%.2f" % NSorient)
+        EWstr=str("%.2f" % EWorient)
+        thetaNSstd=np.std(thetaNS)
+        thetaEWstd=np.std(thetaEW)
+        NSstdstr=str("%.2f" % thetaNSstd)
+        EWstdstr=str("%.2f" % thetaEWstd)
 
-
-
-
-
-
-# now create a nice plot. 
-            plt.figure()
-            ax = plt.subplot(111, projection='polar')
-            ax.set_theta_zero_location("N")
-            ax.set_theta_direction(-1)
-# get the particle motion
-            #theta = np.arctan2(SignalBHN.data,SignalBHE.data)
-            #r = np.sqrt(SignalBHE.data*SignalBHE.data 
-            #      + SignalBHN.data*SignalBHN.data)
-# get the gradient on the particle motion
-            #gradPM = 
-# get the information for the lines
-            calcR = [1., 1.]
-            calcTheta = [np.radians(ang),np.radians(ang+180)]
-            calcTheta2 = [np.radians(ang2),np.radians(ang2+180)]
-            expcTheta = ([np.radians(StationAziExpec[2]), 
-                          np.radians(StationAziExpec[2]+180)])
-            label1="Baz_calc = %.2f" % (ang)
-            label2="Baz2_calc = %.2f" % (ang2)
-            label3="Baz_meas = %.2f" % (StationAziExpec[2])
-# actually plot the things
-            plt.plot(calcTheta,calcR,'blue',label=label1)
-            plt.plot(calcTheta2,calcR,'cyan',label=label2)
-            plt.plot(expcTheta,calcR,'black',label=label3)
-            #plt.plot(theta,r,'red',label='Particle Motion')
-            plt.plot(SignalBHE.data,SignalBHN.data, 'red',label='Particle Motion')
-            plt.text(7*np.pi/4,2.5,str(station[1]+' '+ rotated + ' '+str(eventTime)),fontsize=14)
-            printstr="linearity %.2f" % (line)
-            printstr1="SNR, BHN %.2f" % (SNR_BHN)
-            printstr2="SNR, BHE %.2f" % (SNR_BHE)
-            plt.text(32*np.pi/20,2.7,(printstr+'\n'+
-                     printstr1+'\n'+printstr2))
-            fileName =(os.getcwd() +'/'+ resDir +'/Azimuth_'+
-                    station[0] +'_'+ station[1] +'_'+
-                    str(eventTime) + '.png')
-            print fileName
-            #plt.close()
-            #plt.figure()
-            #x = SignalBHE.data**2.
-            #y = SignalBHN.data**2.
-            #plt.plot(x,y,marker="o")
-            #p = np.polyfit(x,y,1)
-            #print p
-            #ycalc = p[0]*x + p[1]
-            #plt.plot(x,ycalc,marker="v")
-            #pfitR=np.sqrt(x+ycalc**2.)
-            #calcR=[max(pfitR), abs(min(pfitR))]
-            #pfitTheta= np.arctan2(ycalc,SignalBHE.data)
-            #aveTheta=np.average(pfitTheta)
-            #plotAveTheta=[aveTheta, aveTheta+np.pi]
-            #print np.degrees(aveTheta)
-
-            #print "Max r "+str(max(r))
-            #print "Min r "+str(min(r))
-            #print "Max index r "+str(np.argmax(r))
-            #print "Min index r "+str(np.argmin(r))
-            ##print np.degrees(theta)
-            #print "theta at r max "+str(np.degrees(theta[np.argmax(r)]))
-            #print "theta at r min "+str(np.degrees(theta[np.argmin(r)]))
-            #print "Max index theta "+str(np.argmax(theta))
-            #print "Min index theta "+str(np.argmin(theta))
-            #print "Max theta "+str(np.degrees(np.max(theta)))
-            #print "Min theta "+str(np.degrees(np.min(theta)))
-
-            #label4=("Baz_part = %.2f" % (np.degrees(aveTheta)))
-            #plt.plot(plotAveTheta, calcR,'orange',label=label4)
-            #plt.plot(pfitTheta, pfitR,'orange',label=label4)
-
-            plt.legend(bbox_to_anchor=(0.8, 0.85, 1., 0.102),loc=3,borderaxespad=0.)
-            plt.savefig(fileName,format='png')
-            #plt.show()
-            plt.close()
+    # now create a nice plot. 
+        plt.figure(figsize=(11,8.5))
+        ax = plt.subplot(111, projection='polar')
+        ax.set_theta_zero_location("N")
+        ax.set_theta_direction(-1)
+        #ax.set_ylabel=('Correlation')
+        plt.set_ylabel=('Correlation')
+        ax.set_title(station+' ,Ref Chan: '+ refChan + ' ,Test Chan: ' \
+                + testChan + ', for ' + startDate + ' to ' + endDate )
+        print(NSorient, EWorient)
+        label1="NS"
+        label2="EW"
+        #print(isinstance(metadata[4],str))
+        #metadataRad=np.deg2rad(metadata[4])
+        plt.ylim([0, 1.2])
+        print(metadata[4])
+        plt.arrow(np.deg2rad(float(metadata[4])),0, 0,1.09,fc='b', ec='b',head_width=0.05, head_length = 0.1, alpha=0.8)
+        plt.plot(thetaNSrad,thetaNScorr,'bo', label=label1, alpha =0.35)
+        plt.arrow(np.deg2rad(float(metadata[5])),0, 0,1.09,fc='g', ec='g',head_width=0.05, head_length = 0.1, alpha=0.8)
+        plt.plot(thetaEWrad,thetaEWcorr,'go', label=label2, alpha=0.35)
+        print(np.deg2rad(float(metadata[5])))
+        plt.legend(bbox_to_anchor=(0.95, 0.85, 1.2, 0.102),loc=3,borderaxespad=0.)
+        plotString = str("NS metadata, calculated (std): " + str(metadata[4]) +\
+                ", " + NSstr +"(" + NSstdstr + ")\nEW metadata, calculated (std): " + str(metadata[5]) +\
+                ", " + EWstr +"(" + EWstdstr + ")\n" + str(numdays) + " days in calculation")
+        plt.text(19*np.pi/20,1.4,plotString,fontsize=12)
+        plt.show()
