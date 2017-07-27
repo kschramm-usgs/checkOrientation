@@ -10,6 +10,7 @@ from time import gmtime, strftime
 from scipy.optimize import root
 from obspy.io.xseed import Parser
 from obspy.signal.cross_correlation import xcorr
+import logging
 debug = True
 debug = False 
 
@@ -94,7 +95,8 @@ def rotatehorizontal(stream, angle1, angle2):
             print 'Swap the components: ' + str((360. - angle1) - angle2)
         stream.sort(['channel'], reverse=True)
         theta_r1, theta_r2 = theta_r2, theta_r1
-        print(stream)
+        if debugRot:
+            print(stream)
     # create new trace objects with same info as previous
     rotatedN = stream[0].copy()
     rotatedE = stream[1].copy()
@@ -108,12 +110,6 @@ def rotatehorizontal(stream, angle1, angle2):
     # return new streams object with rotated traces
     streamsR = Stream(traces=[rotatedN, rotatedE])
     return streamsR        
-
-
-
-
-
-
 
 
 
@@ -150,10 +146,12 @@ def getorientation(tr, sp):
 ########################################################################
 # start of the main program
 if __name__ == "__main__":
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
     net = 'IU'
-    station  = "ANMO"
+    station  = "HRV"
     # Here is our start and end time
-    stime = UTCDateTime('2016-150T00:00:00.0')
+    stime = UTCDateTime('2016-099T00:00:00.0')
     etime = UTCDateTime('2016-366T00:00:00.0')
     ctime = stime
 
@@ -214,6 +212,7 @@ if __name__ == "__main__":
             st.merge()
             st.filter('bandpass',freqmin=1./8., freqmax=1./4., zerophase=True, corners=4)
             st.taper(0.05)
+            st.plot()
         
         # okay time to process the relative orientation
         # We need to grab the different locations of the sensors
@@ -222,12 +221,12 @@ if __name__ == "__main__":
                 locs.append(str(tr.stats.location))
             locs = list(set(locs))
             locs.sort()
-            if debug:
-                print(locs)
+            logging.debug(str(locs))
             # We now have all the location codes for the statio
             # do we have 2 or three locs?  how do we handle the few stations with 
             # more than 2 locs?
             if len(locs) >= 2:
+                logging.info(str(len(locs)))
                 if (debug):
                     print (len(locs))
                     print (locs)
@@ -237,53 +236,48 @@ if __name__ == "__main__":
                 refloc = locs.pop(0)
                 stref = st.select(location=refloc)
                 stref.sort(['channel'])
-                threeChannels(stref.count())
        #make sure we have 3 component data 
-                if (not threeChannels):
+                if (not threeChannels(stref.count())):
                     if debug:
                         print('No 3 component data: '+ string)
                     #better increment....
                     ctime += 24.*60.*60.
                     continue
+                # rotate the reference to metadata
+                Ref1 = getorientation(stref[0], sp)
+                Ref2 = getorientation(stref[1], sp)
+                stref = rotatehorizontal(stref,Ref1,Ref2)
        # now loop over the sensors  
                 for loc in locs:
+                    print('in locs loop')
+                    stref.plot()
 # we seem to have passed a few tests, so let's create a file name
                     fileName='Results_' + sta + '_' + refloc + '_' + loc 
                     sttest = st.select(location=loc)
                     sttest.sort(['channel'])
         # make sure we have 3 component data 
-                    threeChannels(sttest.count())
-                    if (not threeChannels) :
+                    if (not threeChannels(sttest.count())):
                         if debug:
                             print('No 3 component data: '+ string)
                         #better increment....
                         ctime += 24.*60.*60.
                         continue
-                    if debug:
-                        print(stref)
-                        print(sttest)
+                    #if debug:
+                    print('print out stream info')
+                    print(stref)
+                    print(sttest)
                 # now make sure that we have the same number of samples
                     if (stref[0].count() != stref[1].count()):
                         if debug:
                             print('samples not the same')
                         ctime += 24.*60.*60.
                         continue
-                    elif (stref[0].count() != stref[2].count()):
+                    elif (stref[0].count() != sttest[0].count()):
                         if debug:
                             print('samples not the same')
                         ctime += 24.*60.*60.
                         continue
-                    elif stref[0].count() != sttest[0].count():
-                        if debug:
-                            print('samples not the same')
-                        ctime += 24.*60.*60.
-                        continue
-                    elif stref[0].count() != sttest[1].count():
-                        if debug:
-                            print('samples not the same')
-                        ctime += 24.*60.*60.
-                        continue
-                    elif stref[0].count() != sttest[2].count():
+                    elif (stref[0].count() != sttest[1].count()):
                         if debug:
                             print('samples not the same')
                         ctime += 24.*60.*60.
@@ -291,8 +285,6 @@ if __name__ == "__main__":
 
 
         # get metadata orientation values
-                    Ref1 = getorientation(stref[0], sp)
-                    Ref2 = getorientation(stref[1], sp)
                     Test1 = getorientation(sttest[0],sp)
                     Test2 = getorientation(sttest[1], sp)
                     if (Test1 == None or Test2 == None):
@@ -300,7 +292,6 @@ if __name__ == "__main__":
         #rotdata is an object that stores the data and has
         #the rotation method.
                     rotdata=Rotation(stref,sttest)
-                    stref = rotatehorizontal(stref,Ref1,Ref2)
                     sttest = rotatehorizontal(sttest, Test1, Test2)
                     
                     
@@ -329,7 +320,8 @@ if __name__ == "__main__":
                     from scipy.stats import pearsonr
                     corrvalNS = pearsonr(stref[0].data,sttest[0].data)[0]
                     corrvalEW = pearsonr(stref[1].data,sttest[1].data)[0]
-                    print(corrvalNS)
+                    if (debug):
+                        print(corrvalNS)
                     
         # if there is a low correlation, don't use that data.  (one station might be noisy, or we ran a calibration)
                     if (abs(corrvalNS) < 0.5) or (abs(corrvalEW) < 0.5):
