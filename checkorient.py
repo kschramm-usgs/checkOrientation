@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
-from obspy.core import read, UTCDateTime
+from obspy.core import read, UTCDateTime, Stream
 import os
 import glob
 import sys
+import math
 import numpy as np
 from time import gmtime, strftime
 from scipy.optimize import root
@@ -55,14 +56,13 @@ class Rotation:
     @staticmethod
     def corrNS(self):
         windowLen = self.stref[0].data.length()/2
-        a,b = xcorr(self.stref[0].data,self.sttest[0].data,windowLen)
-        corValue = a
+        a,corValue = xcorr(self.stref[0].data,self.sttest[0].data,windowLen)
         return corValue
 
 # This function gets the correlation of the data
     def corrEW(self):
         windowLen = self.stref[1].data.length()/2
-        corValue,b = xcorr(self.stref[1].data,self.sttest[1].data,windowLen)
+        a,corValue = xcorr(self.stref[1].data,self.sttest[1].data,windowLen)
         return corValue
         
 # this is stuff Adam Ringler added
@@ -70,7 +70,52 @@ def getsncl(tr):
     """ Return the sncl """
     nslc = (tr.id).split('.')
     return nslc[1], nslc[0], nslc[3], nslc[2]        
-        
+
+def rotatehorizontal(stream, angle1, angle2):
+    """
+    A function to rotate the horizontal components of a seismometer from 
+    radial and transverse into E and North components.
+    """
+    debugRot = False
+    if stream[0].stats.channel in set(['LHE', 'LHN', 'BHE', 'BHN']):
+        stream.sort(['channel'], reverse=True)
+        angle1, angle2 = angle2, angle1
+    if debugRot:
+        print(stream)
+        print 'Angle1: ' + str(angle1) + ' Angle2: ' + str(angle2)
+    theta_r1 = math.radians(angle1)
+    theta_r2 = math.radians(angle2)
+    swapSecond = False
+    if (angle2 >= 180. and angle2 <= 360.) or angle2 == 0.:
+        swapSecond = True 
+    # if the components are swaped swap the matrix
+    if theta_r1 > theta_r2 and swapSecond:
+        if debugRot:
+            print 'Swap the components: ' + str((360. - angle1) - angle2)
+        stream.sort(['channel'], reverse=True)
+        theta_r1, theta_r2 = theta_r2, theta_r1
+        print(stream)
+    # create new trace objects with same info as previous
+    rotatedN = stream[0].copy()
+    rotatedE = stream[1].copy()
+    # assign rotated data
+    rotatedN.data = stream[0].data*math.cos(-theta_r1) +\
+        stream[1].data*math.sin(-theta_r1)
+    rotatedE.data = -stream[1].data*math.cos(-theta_r2-math.pi/2.) +\
+        stream[0].data*math.sin(-theta_r2-math.pi/2.)
+    rotatedN.stats.channel = 'LHN'
+    rotatedE.stats.channel = 'LHE'
+    # return new streams object with rotated traces
+    streamsR = Stream(traces=[rotatedN, rotatedE])
+    return streamsR        
+
+
+
+
+
+
+
+
 
 def getorientation(tr, sp):
     """ 
@@ -108,7 +153,7 @@ if __name__ == "__main__":
     net = 'IU'
     station  = "ANMO"
     # Here is our start and end time
-    stime = UTCDateTime('2016-201T00:00:00.0')
+    stime = UTCDateTime('2017-150T00:00:00.0')
     etime = UTCDateTime('2017-200T00:00:00.0')
     ctime = stime
 
@@ -149,7 +194,8 @@ if __name__ == "__main__":
         # read in the data
         # Just grab one hour we might want to change this
             try:
-                st = read(string, starttime=ctime, endtime=ctime+60.*60)
+                st = read(string, starttime=ctime, endtime=ctime+60.*60.*24.)
+                print(st)
             except:
                 print('no data for '+ string)
                 #better increment....
@@ -165,8 +211,9 @@ if __name__ == "__main__":
                 continue
             st.detrend('demean')
             st.merge()
-            st.filter('bandpass',freqmin=1./8., freqmax=1./4., zerophase=True)
+            st.filter('bandpass',freqmin=1./8., freqmax=1./4., zerophase=True, corners=4)
             st.taper(0.05)
+        
         # okay time to process the relative orientation
         # We need to grab the different locations of the sensors
             locs = []
@@ -252,6 +299,10 @@ if __name__ == "__main__":
         #rotdata is an object that stores the data and has
         #the rotation method.
                     rotdata=Rotation(stref,sttest)
+                    stref = rotatehorizontal(stref,Ref1,Ref2)
+                    sttest = rotatehorizontal(sttest, Test1, Test2)
+                    
+                    
         #root function - finds the roots of the rotation
         #method. lm is the levenberg-marquardt method
                     resultNS = root(rotdata.rotNS, 0., method = 'lm')
@@ -278,9 +329,14 @@ if __name__ == "__main__":
                     #corrvalNS = rotdata.corrNS
                     #windowLen = stref[0].count()
                     #shiftLen  = round(stref[0].count()/10)
-                    shiftLen = int(20) 
-                    corrIndex,corrvalNS = xcorr(stref[0].data,sttest[0].data,shiftLen)
-                    corrIndex,corrvalEW = xcorr(stref[1].data,sttest[1].data,shiftLen)
+                    #shiftLen = int(20) 
+                    #corrIndex,corrvalNS = xcorr(stref[0].data,sttest[0].data,shiftLen)
+                    #corrIndex,corrvalEW = xcorr(stref[1].data,sttest[1].data,shiftLen)
+                    from scipy.stats import pearsonr
+                    corrvalNS = pearsonr(stref[0].data,sttest[0].data)[0]
+                    corrvalEW = pearsonr(stref[1].data,sttest[1].data)[0]
+                    print(corrvalNS)
+                    
         # if there is a low correlation, don't use that data.  (one station might be noisy, or we ran a calibration)
                     if (abs(corrvalNS) < 0.5) or (abs(corrvalEW) < 0.5):
                         ctime += 24.*60.*60.
