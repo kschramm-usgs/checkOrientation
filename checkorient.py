@@ -14,11 +14,19 @@ import logging
 debug = True
 debug = False 
 
+def notSameSamp(st1,st2):
+    retVal = True
+    if (st1.count() == st2.count()):
+        retVal = False
+    return retVal
+  
+
 def threeChannels(numTraces):
     retVal = False
     if (numTraces == 3):
         retVal = True
     return retVal 
+
 
 class Rotation:
     def __init__(self, stref, sttest):
@@ -149,10 +157,10 @@ if __name__ == "__main__":
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
     net = 'IU'
-    station  = "HRV"
+    station  = "TEIG"
     # Here is our start and end time
-    stime = UTCDateTime('2016-099T00:00:00.0')
-    etime = UTCDateTime('2016-366T00:00:00.0')
+    stime = UTCDateTime('2017-181T00:00:00.0')
+    etime = UTCDateTime('2017-208T00:00:00.0')
     ctime = stime
 
     sp = Parser('/APPS/metadata/SEED/' + net + '.dataless')
@@ -188,7 +196,7 @@ if __name__ == "__main__":
             if debug:
                 print('On day: ' + day)
         # format the string
-            string = '/msd/' + sta + '/' + str(ctime.year) + '/' + day + '/*LH*'
+            string = '/msd/' + sta + '/' + str(ctime.year) + '/' + day + '/*[1-6]0*LH*'
         # read in the data
         # Just grab one hour we might want to change this
             try:
@@ -212,7 +220,6 @@ if __name__ == "__main__":
             st.merge()
             st.filter('bandpass',freqmin=1./8., freqmax=1./4., zerophase=True, corners=4)
             st.taper(0.05)
-            st.plot()
         
         # okay time to process the relative orientation
         # We need to grab the different locations of the sensors
@@ -221,7 +228,8 @@ if __name__ == "__main__":
                 locs.append(str(tr.stats.location))
             locs = list(set(locs))
             locs.sort()
-            logging.debug(str(locs))
+ #           locs = ['10', '60']
+            logging.debug('Channels available: '+ str(locs))
             # We now have all the location codes for the statio
             # do we have 2 or three locs?  how do we handle the few stations with 
             # more than 2 locs?
@@ -244,15 +252,20 @@ if __name__ == "__main__":
                     ctime += 24.*60.*60.
                     continue
                 # rotate the reference to metadata
+                if (notSameSamp(stref[0],stref[1])):
+                    logging.debug('samples in ref data not the same')
+                    ctime += 24.*60.*60.
+                    continue
+
                 Ref1 = getorientation(stref[0], sp)
                 Ref2 = getorientation(stref[1], sp)
                 stref = rotatehorizontal(stref,Ref1,Ref2)
        # now loop over the sensors  
                 for loc in locs:
-                    print('in locs loop')
-                    stref.plot()
 # we seem to have passed a few tests, so let's create a file name
                     fileName='Results_' + sta + '_' + refloc + '_' + loc 
+                    if (debug):
+                        print(fileName)
                     sttest = st.select(location=loc)
                     sttest.sort(['channel'])
         # make sure we have 3 component data 
@@ -262,24 +275,20 @@ if __name__ == "__main__":
                         #better increment....
                         ctime += 24.*60.*60.
                         continue
-                    #if debug:
-                    print('print out stream info')
-                    print(stref)
-                    print(sttest)
+                    logging.debug('print out stream info')
+                    logging.debug(stref)
+                    logging.debug(sttest)
                 # now make sure that we have the same number of samples
-                    if (stref[0].count() != stref[1].count()):
-                        if debug:
-                            print('samples not the same')
+                    if (notSameSamp(stref[0],sttest[0])):
+                        logging.debug('samples not the same')
                         ctime += 24.*60.*60.
                         continue
-                    elif (stref[0].count() != sttest[0].count()):
-                        if debug:
-                            print('samples not the same')
+                    elif (notSameSamp(stref[0],sttest[0])):
+                        logging.debug('samples not the same')
                         ctime += 24.*60.*60.
                         continue
-                    elif (stref[0].count() != sttest[1].count()):
-                        if debug:
-                            print('samples not the same')
+                    elif (notSameSamp(stref[0],sttest[0])):
+                        logging.debug('samples not the same')
                         ctime += 24.*60.*60.
                         continue
 

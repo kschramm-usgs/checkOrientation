@@ -67,6 +67,15 @@ for file in files:
                 epochAngles.append(metaAng)
                 metaAngOld=metaAng
                 newEpochDate=str(lv[3])+'-'+str(lv[2]).strip()
+                thetaNS_e1=thetaNS
+                thetaNSrad_e1=thetaNSrad
+                thetaEW_e1=thetaEW_e1
+                thetaEWrad_e1=thetaEWrad=[]
+                thetaNSresid=[]
+                thetaEWresid=[]
+                thetaNScorr=[]
+                thetaEWcorr=[]
+                
 
 
         # moving this to the plotting routine...
