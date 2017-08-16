@@ -69,8 +69,17 @@ for file in files:
                 newEpochDate=str(lv[3])+'-'+str(lv[2]).strip()
                 thetaNS_e1=thetaNS
                 thetaNSrad_e1=thetaNSrad
-                thetaEW_e1=thetaEW_e1
-                thetaEWrad_e1=thetaEWrad=[]
+                thetaEW_e1=thetaEW
+                thetaEWrad_e1=thetaEWrad
+                thetaNSresid_e1=thetaNSresid
+                thetaEWresid_e1=thetaEWresid
+                thetaNScorr_e1=thetaNScorr
+                thetaEWcorr_e1=thetaEWcorr
+# reset the other lists
+                thetaNS=[]
+                thetaNSrad=[]
+                thetaEW=[]
+                thetaEWrad=[]
                 thetaNSresid=[]
                 thetaEWresid=[]
                 thetaNScorr=[]

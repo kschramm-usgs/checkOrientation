@@ -157,10 +157,10 @@ if __name__ == "__main__":
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
     net = 'IU'
-    station  = "TEIG"
+    station  = "KOWA"
     # Here is our start and end time
-    stime = UTCDateTime('2017-181T00:00:00.0')
-    etime = UTCDateTime('2017-208T00:00:00.0')
+    stime = UTCDateTime('2016-001T00:00:00.0')
+    etime = UTCDateTime('2016-366T00:00:00.0')
     ctime = stime
 
     sp = Parser('/APPS/metadata/SEED/' + net + '.dataless')
@@ -196,7 +196,7 @@ if __name__ == "__main__":
             if debug:
                 print('On day: ' + day)
         # format the string
-            string = '/msd/' + sta + '/' + str(ctime.year) + '/' + day + '/*[1-6]0*LH*'
+            string = '/msd/' + sta + '/' + str(ctime.year) + '/' + day + '/*LH*'
         # read in the data
         # Just grab one hour we might want to change this
             try:
@@ -295,9 +295,14 @@ if __name__ == "__main__":
 
         # get metadata orientation values
                     Test1 = getorientation(sttest[0],sp)
+                    logging.debug('loc1 orientation '+ str(Test1))
                     Test2 = getorientation(sttest[1], sp)
+                    logging.debug('loc2 orientation '+ str(Test2))
                     if (Test1 == None or Test2 == None):
                         print("Cannot find azimuth for test data.") 
+                        ctime += 24.*60.*60.
+                        continue
+                        
         #rotdata is an object that stores the data and has
         #the rotation method.
                     rotdata=Rotation(stref,sttest)
