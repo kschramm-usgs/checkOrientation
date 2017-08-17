@@ -51,12 +51,16 @@ for file in files:
             print(lv)
     # break up data into arrays
             refAng = lv[10]
-            thetaNS.append(float(lv[4])+float(refAng))
-            thetaNSrad.append(np.deg2rad(float(lv[4])+float(refAng)))
+            thetaNS.append(float(lv[4]))
+            #thetaNS.append(float(lv[4])+float(refAng))
+            thetaNSrad.append(np.deg2rad(float(lv[4])))
+            #thetaNSrad.append(np.deg2rad(float(lv[4])+float(refAng)))
             thetaNSresid.append(lv[5])
             thetaNScorr.append(lv[6])
-            thetaEW.append(float(lv[7])+float(refAng))
-            thetaEWrad.append(np.deg2rad(float(lv[7])+float(refAng)))
+            thetaEW.append(float(lv[7]))
+            #thetaEW.append(float(lv[7])+float(refAng))
+            thetaEWrad.append(np.deg2rad(float(lv[7])))
+            #thetaEWrad.append(np.deg2rad(float(lv[7])+float(refAng)))
             thetaEWresid.append(lv[8])
             thetaEWcorr.append(lv[9])
             # check for changes in epoch
@@ -85,8 +89,7 @@ for file in files:
                 thetaNScorr=[]
                 thetaEWcorr=[]
                 
-
-
+        # calculate some statistics
         # moving this to the plotting routine...
         numdays = len(thetaNS)
         NSorient=np.average(thetaNS)
@@ -136,4 +139,6 @@ for file in files:
                 ' Epoch 2 NS angle: '+ str(epochAngles[1]))
                  
         plt.text(19*np.pi/20,1.4,plotString,fontsize=12)
-        plt.show()
+        fileName=station+'_'+refChan+'_'+testChan
+        plt.savefig(os.getcwd()+'/'+fileName+'.pdf', format='pdf')
+        #plt.show()

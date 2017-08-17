@@ -157,7 +157,7 @@ if __name__ == "__main__":
     logger = logging.getLogger()
     logger.setLevel(logging.DEBUG)
     net = 'IU'
-    station  = "KOWA"
+    station  = "*"
     # Here is our start and end time
     stime = UTCDateTime('2016-001T00:00:00.0')
     etime = UTCDateTime('2016-366T00:00:00.0')
