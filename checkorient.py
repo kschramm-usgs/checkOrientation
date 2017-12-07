@@ -74,7 +74,7 @@ class Rotation:
         a,corValue = xcorr(self.stref[1].data,self.sttest[1].data,windowLen)
         return corValue
         
-# this is stuff Adam Ringler added
+# this is stuff Adam Ringler added to get information about the station
 def getsncl(tr):
     """ Return the sncl """
     nslc = (tr.id).split('.')
@@ -118,8 +118,6 @@ def rotatehorizontal(stream, angle1, angle2):
     # return new streams object with rotated traces
     streamsR = Stream(traces=[rotatedN, rotatedE])
     return streamsR        
-
-
 
 def getorientation(tr, sp):
     """ 
@@ -228,7 +226,6 @@ if __name__ == "__main__":
                 locs.append(str(tr.stats.location))
             locs = list(set(locs))
             locs.sort()
- #           locs = ['10', '60']
             logging.debug('Channels available: '+ str(locs))
             # We now have all the location codes for the statio
             # do we have 2 or three locs?  how do we handle the few stations with 
@@ -262,7 +259,6 @@ if __name__ == "__main__":
                 stref = rotatehorizontal(stref,Ref1,Ref2)
        # now loop over the sensors  
                 for loc in locs:
-# we seem to have passed a few tests, so let's create a file name
                     fileName='Results_' + sta + '_' + refloc + '_' + loc 
                     if (debug):
                         print(fileName)
@@ -292,7 +288,6 @@ if __name__ == "__main__":
                         ctime += 24.*60.*60.
                         continue
 
-
         # get metadata orientation values
                     Test1 = getorientation(sttest[0],sp)
                     logging.debug('loc1 orientation '+ str(Test1))
@@ -307,7 +302,6 @@ if __name__ == "__main__":
         #the rotation method.
                     rotdata=Rotation(stref,sttest)
                     sttest = rotatehorizontal(sttest, Test1, Test2)
-                    
                     
         #root function - finds the roots of the rotation
         #method. lm is the levenberg-marquardt method
@@ -355,10 +349,6 @@ if __name__ == "__main__":
                     if debug:
                         print('opening file '+fileName)
 
-
-                    # this if not in globals doesn't seem to work. going back to the other test.
-                    #if 'f' not in globals():
-                    # write results to file.
                     if not os.path.isfile(fileName):
                         print('writing header info')
                         f=open(fileName, 'w')
@@ -383,28 +373,10 @@ if __name__ == "__main__":
                 
         # in the while ctime .lt. etime - need to increment this by a day.
             ctime += 24.*60.*60.
-    # calculate some statistics...
-    # moving this to the plotting routine...
-        #if os.path.isfile(fileName):
-        #    thetaNSAve=np.average(thetaNS)
-        #    thetaEWAve=np.average(thetaEW)
-        #    thetaNSstd=np.std(thetaNS)
-        #    thetaEWstd=np.std(thetaEW)
-        #    f=open(fileName, 'a')
-        #    f.write('NS Ave, '+ str(thetaNSAve)  +', std, '+ str(thetaNSstd) \
-        #            +', EW Ave, '+ str(thetaEWAve) +', std, '+ str(thetaEWstd) \
-        #            +', number of days,  ' + str(len(thetaNS)) + '\n')
-        #    f.write('Metadata information: Ref theta, ' + str(Ref1) + ', ' + str(Ref2) \
-        #            + ', Test theta, ' + str(Test1) + ', ' + str(Test2) +  '\n')
-        #    f.close()
     # done with that station, exit the while loop, reset ctime and numdays
         ctime = stime
-    # calculate the standard deviation and average    
 
         # close the file when you exit the while loop
-
         if 'f' in globals():
             f.close()
 
-        #    except:
-        #        print('Problem with ' + sta + ' on day ' + day)

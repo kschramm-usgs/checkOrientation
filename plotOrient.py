@@ -7,13 +7,6 @@ import os
 import glob
 from obspy import UTCDateTime
 
-#first read in the data - look for files starting with Results*
-#path = os.getcwd()
-#network="IU"
-#station="ANMO"
-#refChan="00"
-#testChan="10"
-#file = "Results_" + network +"_"+ station +"_"+ refChan +"_"+ testChan
 # get list of station files:
 files=glob.glob('Results_*')
 for file in files:
@@ -52,15 +45,11 @@ for file in files:
     # break up data into arrays
             refAng = lv[10]
             thetaNS.append(float(lv[4]))
-            #thetaNS.append(float(lv[4])+float(refAng))
             thetaNSrad.append(np.deg2rad(float(lv[4])))
-            #thetaNSrad.append(np.deg2rad(float(lv[4])+float(refAng)))
             thetaNSresid.append(lv[5])
             thetaNScorr.append(lv[6])
             thetaEW.append(float(lv[7]))
-            #thetaEW.append(float(lv[7])+float(refAng))
             thetaEWrad.append(np.deg2rad(float(lv[7])))
-            #thetaEWrad.append(np.deg2rad(float(lv[7])+float(refAng)))
             thetaEWresid.append(lv[8])
             thetaEWcorr.append(lv[9])
             # check for changes in epoch
@@ -90,7 +79,6 @@ for file in files:
                 thetaEWcorr=[]
                 
         # calculate some statistics
-        # moving this to the plotting routine...
         numdays = len(thetaNS)
         NSorient=np.average(thetaNS)
         EWorient=np.average(thetaEW)
@@ -113,8 +101,6 @@ for file in files:
         print(NSorient, EWorient)
         label1="NS"
         label2="EW"
-        #print(isinstance(metadata[4],str))
-        #metadataRad=np.deg2rad(metadata[4])
         plt.ylim([0, 1.2])
 
         for ang in epochAngles:
@@ -141,4 +127,4 @@ for file in files:
         plt.text(19*np.pi/20,1.4,plotString,fontsize=12)
         fileName=station+'_'+refChan+'_'+testChan
         plt.savefig(os.getcwd()+'/'+fileName+'.pdf', format='pdf')
-        #plt.show()
+        plt.show()
